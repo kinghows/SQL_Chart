@@ -64,11 +64,7 @@ def chart(conn,database_type,chart_type,title,x,y,data):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    if ylist[0] == '0':
-        data = []
-        for row in datas:
-            data.append(list(row))
-    else:
+    if ylist[0] != '0':
         zdict={}
         for i in range(len(ylist)):
             zdict[ylist[i]]=[]
@@ -104,7 +100,7 @@ def chart(conn,database_type,chart_type,title,x,y,data):
     elif chart_type == 'calendar': # 日历图
         calendar = Calendar()
         calendar.set_global_opts(title_opts={"text": title})
-        calendar.add("", data, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
+        calendar.add("", datas, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
         calendar.set_global_opts(
             title_opts=opts.TitleOpts(title=title),
             visualmap_opts=opts.VisualMapOpts(
