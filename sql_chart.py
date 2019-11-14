@@ -9,12 +9,12 @@
 import getopt
 import sys
 import configparser
-import time
-from pyecharts.charts  import Page,Pie, EffectScatter, Bar, Line,Scatter,Funnel, Gauge, Graph,Liquid, Polar, Radar,WordCloud
+from pyecharts.charts import Page,Pie,Bar,Line
+from pyecharts.charts import Calendar
 from pyecharts import options as opts
-from snapshot_selenium import snapshot as driver
-from pyecharts.render import make_snapshot
-from pyecharts.globals import ThemeType
+
+import datetime
+import random
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -64,13 +64,18 @@ def chart(conn,database_type,chart_type,title,x,y,data):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    zdict={}
-    for i in range(len(ylist)):
-        zdict[ylist[i]]=[]
+    if ylist[0] == '0':
+        data = []
+        for row in datas:
+            data.append(list(row))
+    else:
+        zdict={}
+        for i in range(len(ylist)):
+            zdict[ylist[i]]=[]
 
-    for row in datas:
-        #zdict[row[1].encode('raw_unicode_escape').decode('utf-8')].append(str(row[2])) #linux
-        zdict[row[1]].append(str(row[2])) #windows
+        for row in datas:
+            #zdict[row[1].encode('raw_unicode_escape').decode('utf-8')].append(str(row[2])) #linux
+            zdict[row[1]].append(str(row[2])) #windows
     
     if chart_type == 'line':    # 折线图
         line = Line()
@@ -96,9 +101,25 @@ def chart(conn,database_type,chart_type,title,x,y,data):
             name = ylist[i]
             bar.add_yaxis(name, zdict[name]) 
         return bar
+    elif chart_type == 'calendar': # 日历图
+        calendar = Calendar()
+        calendar.set_global_opts(title_opts={"text": title})
+        calendar.add("", data, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
+        calendar.set_global_opts(
+            title_opts=opts.TitleOpts(title=title),
+            visualmap_opts=opts.VisualMapOpts(
+                max_=20000,
+                min_=500,
+                orient="horizontal",
+                is_piecewise=True,
+                pos_top="230px",
+                pos_left="100px",
+            ),
+        )
+        return calendar
 
-        
 if __name__=="__main__":
+    
     dbinfo=["127.0.0.1","root","",3306,"orcl"] #host,user,passwd,port,sid
     config_file="dbset.ini"
     chart_title=""
@@ -106,8 +127,8 @@ if __name__=="__main__":
     save_as = "html"
     database_type = "MySQL"
 
-    opts, args = getopt.getopt(sys.argv[1:], "p:s:")
-    for o,v in opts:
+    opt, args = getopt.getopt(sys.argv[1:], "p:s:")
+    for o,v in opt:
         if o == "-p":
             config_file = v
         elif o == "-s":
@@ -133,7 +154,7 @@ if __name__=="__main__":
         dbinfo[4] = config.get("database", "sid")
 
     conn = f_get_conn(dbinfo,database_type)
-
+    
     if all_in_one_page =='1':
         page = Page()
 
