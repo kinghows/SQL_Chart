@@ -31,11 +31,11 @@ titlem = ***
 
 chart_typem = ***
 
-xm =***
+xm =select x from table
 
-ym =***
+ym =select y from table
 
-datam =***
+datam =select x,y,data from table
 
 n must <=m
 
