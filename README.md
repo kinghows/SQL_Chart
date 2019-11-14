@@ -25,7 +25,7 @@ or just look at the results: chart_demo.html
 
 dbset example:
 
-chart_title = my_chart1
+chart_title = chart_demo
 
 all_in_one_page = 1
 
