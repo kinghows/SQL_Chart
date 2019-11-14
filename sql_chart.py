@@ -1,10 +1,10 @@
 #!/usr/local/bin/python
 # coding: utf-8
 
-# SQL Report V1.1.5
-# Export SQL to HTML report,export SQL to txt file.
-# Copyright (C) 2017-2017 Kinghow - Kinghow@hotmail.com
-# Git repository available at https://github.com/kinghows/SQL_Report
+# SQL Chart V0.1.0
+# Export SQL to HTML chart.
+# Copyright (C) 2019-2019 Kinghow - Kinghow@hotmail.com
+# Git repository available at https://github.com/kinghows/SQL_Chart
 
 import getopt
 import sys
