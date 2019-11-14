@@ -9,9 +9,9 @@ Oracle need install cx_Oracle
 
 pip install cx_Oracle
 
-pip install pyecharts
+chart used pyecharts 1.6+
 
-pyecharts 1.6+
+pip install pyecharts
 
 Edit connect info in dbset.ini [database] part.
 
