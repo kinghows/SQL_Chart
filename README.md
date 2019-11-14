@@ -17,9 +17,15 @@ Edit connect info in dbset.ini [database] part.
 
 Edit you SQL info in dbset.ini [[chart]] part.
 
-example:
+demo:
 
-chart_title = my_chart1
+you can import chart_demo.sql to mysql,then python sql_chart.py -p dbset.ini -s html
+
+or just look at the results: chart_demo.html
+
+dbset example:
+
+chart_title = chart_demo
 
 all_in_one_page = 1
 
