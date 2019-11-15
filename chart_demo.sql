@@ -462,6 +462,86 @@ insert  into `t_chart1`(`id`,`date`,`area`,`amount`) values
 (219,'2019-11-13','天津',10414801.58),
 (221,'2019-11-13','上海',29845820.32);
 
+/*Table structure for table `t_graph` */
+
+DROP TABLE IF EXISTS `t_graph`;
+
+CREATE TABLE `t_graph` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `node` varchar(20) DEFAULT NULL,
+  `size` int(5) DEFAULT NULL,
+  `link` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_graph` */
+
+insert  into `t_graph`(`id`,`node`,`size`,`link`) values 
+(1,'结点1',10,'结点1'),
+(2,'结点1',10,'结点2'),
+(3,'结点1',10,'结点3'),
+(4,'结点1',10,'结点4'),
+(5,'结点1',10,'结点5'),
+(6,'结点1',10,'结点6'),
+(7,'结点1',10,'结点7'),
+(8,'结点1',10,'结点8'),
+(9,'结点2',20,'结点1'),
+(10,'结点2',20,'结点2'),
+(11,'结点2',20,'结点3'),
+(12,'结点2',20,'结点4'),
+(13,'结点2',20,'结点5'),
+(14,'结点2',20,'结点6'),
+(15,'结点2',20,'结点7'),
+(16,'结点2',20,'结点8'),
+(17,'结点3',30,'结点1'),
+(18,'结点3',30,'结点2'),
+(19,'结点3',30,'结点3'),
+(20,'结点3',30,'结点4'),
+(21,'结点3',30,'结点5'),
+(22,'结点3',30,'结点6'),
+(23,'结点3',30,'结点7'),
+(24,'结点3',30,'结点8'),
+(25,'结点4',40,'结点1'),
+(26,'结点4',40,'结点2'),
+(27,'结点4',40,'结点3'),
+(28,'结点4',40,'结点4'),
+(29,'结点4',40,'结点5'),
+(30,'结点4',40,'结点6'),
+(31,'结点4',40,'结点7'),
+(32,'结点4',40,'结点8'),
+(33,'结点5',50,'结点1'),
+(34,'结点5',50,'结点2'),
+(35,'结点5',50,'结点3'),
+(36,'结点5',50,'结点4'),
+(37,'结点5',50,'结点5'),
+(38,'结点5',50,'结点6'),
+(39,'结点5',50,'结点7'),
+(40,'结点5',50,'结点8'),
+(41,'结点6',40,'结点1'),
+(42,'结点6',40,'结点2'),
+(43,'结点6',40,'结点3'),
+(44,'结点6',40,'结点4'),
+(45,'结点6',40,'结点5'),
+(46,'结点6',40,'结点6'),
+(47,'结点6',40,'结点7'),
+(48,'结点6',40,'结点8'),
+(49,'结点7',30,'结点1'),
+(50,'结点7',30,'结点2'),
+(51,'结点7',30,'结点3'),
+(52,'结点7',30,'结点4'),
+(53,'结点7',30,'结点5'),
+(54,'结点7',30,'结点6'),
+(55,'结点7',30,'结点7'),
+(56,'结点7',30,'结点8'),
+(57,'结点8',20,'结点1'),
+(58,'结点8',20,'结点2'),
+(59,'结点8',20,'结点3'),
+(60,'结点8',20,'结点4'),
+(61,'结点8',20,'结点5'),
+(62,'结点8',20,'结点6'),
+(63,'结点8',20,'结点7'),
+(64,'结点8',20,'结点8');
+
 /* Procedure structure for procedure `ist_calendar` */
 
 /*!50003 DROP PROCEDURE IF EXISTS  `ist_calendar` */;
@@ -479,6 +559,65 @@ BEGIN
       (DATE_SUB(STR_TO_DATE('2018-01-01','%Y-%m-%d'), INTERVAL - i DAY),FLOOR( 500 + RAND() * 20000));
     SET i = i + 1;
   END WHILE;
+END */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `ist_t_graph` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `ist_t_graph` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`%` PROCEDURE `ist_t_graph`()
+BEGIN
+  DECLARE v_node1 VARCHAR (20);
+  DECLARE v_node2 VARCHAR (20);
+  DECLARE v_size INT (5);
+  
+  DECLARE num INT DEFAULT 0;
+  DECLARE cur_1 CURSOR FOR
+  SELECT "结点1",10  union all 
+  select "结点2",20  UNION ALL
+  SELECT "结点3",30  UNION ALL
+  SELECT "结点4",40  UNION ALL
+  SELECT "结点5",50  UNION ALL
+  SELECT "结点6",40  UNION ALL
+  SELECT "结点7",30  UNION ALL
+  SELECT "结点8",20;
+
+  
+  DECLARE cur_2 CURSOR FOR
+  SELECT "结点1"  UNION ALL 
+  SELECT "结点2"  UNION ALL
+  SELECT "结点3"  UNION ALL
+  SELECT "结点4"  UNION ALL
+  SELECT "结点5"  UNION ALL
+  SELECT "结点6"  UNION ALL
+  SELECT "结点7"  UNION ALL
+  SELECT "结点8";
+  
+  DECLARE CONTINUE HANDLER FOR NOT FOUND SET num = 1;
+  
+  OPEN cur_1;
+  out_loop:LOOP
+      FETCH cur_1 INTO v_node1,v_size;
+      IF num = 1 THEN
+          LEAVE out_loop;
+      END IF;
+      
+      OPEN cur_2;
+      inner_loop:LOOP
+          FETCH cur_2 INTO v_node2;
+          IF num = 1 THEN
+              LEAVE inner_loop;
+          END IF;
+          INSERT INTO t_graph (node, size, link) VALUES (v_node1, v_size, v_node2);
+      end LOOP inner_loop;
+      CLOSE cur_2;
+      SET num=0;
+    
+  END LOOP out_loop;
+  CLOSE cur_1;
 END */$$
 DELIMITER ;
 

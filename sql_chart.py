@@ -9,12 +9,12 @@
 import getopt
 import sys
 import configparser
+from pyecharts import options as opts
 from pyecharts.charts import Page,Pie,Bar,Line
 from pyecharts.charts import Calendar
-from pyecharts import options as opts
-
-import datetime
-import random
+from pyecharts.charts import Funnel
+from pyecharts.charts import Gauge
+from pyecharts.charts import Graph
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -59,7 +59,7 @@ def f_get_query_list(conn, query,database_type):
             strlist.append(str(col)) #windows
     return strlist
 
-def chart(conn,database_type,chart_type,title,x,y,data):
+def chart(conn,database_type,chart_type,title,x,y,data,style):
     xlist = f_get_query_list(conn, x, database_type)
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
@@ -72,7 +72,7 @@ def chart(conn,database_type,chart_type,title,x,y,data):
         for row in datas:
             #zdict[row[1].encode('raw_unicode_escape').decode('utf-8')].append(str(row[2])) #linux
             zdict[row[1]].append(str(row[2])) #windows
-    
+
     if chart_type == 'line':    # 折线图
         line = Line()
         line.set_global_opts(title_opts={"text": title})#{"text": "主标题", "subtext": "副标题"}
@@ -99,20 +99,44 @@ def chart(conn,database_type,chart_type,title,x,y,data):
         return bar
     elif chart_type == 'calendar': # 日历图
         calendar = Calendar()
-        calendar.set_global_opts(title_opts={"text": title})
         calendar.add("", datas, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
         calendar.set_global_opts(
-            title_opts=opts.TitleOpts(title=title),
+            title_opts={"text": title},
             visualmap_opts=opts.VisualMapOpts(
-                max_=20000,
-                min_=500,
-                orient="horizontal",
-                is_piecewise=True,
-                pos_top="230px",
-                pos_left="100px",
-            ),
+            max_=style.setdefault('max_',20000),
+            min_=style.setdefault('min_',500),
+            orient=style.setdefault('orient',"horizontal"),
+            is_piecewise=style.setdefault('is_piecewise',True),
+            pos_top=style.setdefault('pos_top',"230px"),
+            pos_left=style.setdefault('pos_left',"100px"))
         )
         return calendar
+    elif chart_type == 'funnel': # 漏斗图
+        funnel = Funnel()
+        funnel.set_global_opts(title_opts={"text": title})
+        funnel.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position="inside"))
+        return funnel
+    elif chart_type == 'gauge': # 仪表盘
+        gauge = Gauge()
+        gauge.set_global_opts(title_opts={"text": title})
+        gauge.add("", datas, title_label_opts=opts.LabelOpts(
+            font_size=style.setdefault('font_size', 40), 
+            color=style.setdefault('color', "blue"), 
+            font_family=style.setdefault('font_family', "Microsoft YaHei")
+            ))
+        return gauge
+    elif chart_type == 'graph': # 关系图
+        graph = Graph()
+        xs = f_get_query_record(conn, x,database_type)
+        nodes = []
+        for row in xs:
+            nodes.append({"name": row[0], "symbolSize": row[1]})
+        links = []
+        for row in datas:
+            links.append({"source": row[0], "target": row[1]})
+        graph.set_global_opts(title_opts={"text": title})
+        graph.add("", nodes, links, repulsion=4000)
+        return graph
 
 if __name__=="__main__":
     
@@ -161,10 +185,12 @@ if __name__=="__main__":
         x = config.get ( "chart", "x"+str(n))
         y = config.get ( "chart", "y"+str(n))
         data = config.get ( "chart", "data"+str(n))
+        strstyle = config.get ( "chart", "style"+str(n))
+        style = eval(strstyle)
         if all_in_one_page =='1':
-            page.add(chart(conn,database_type,chart_type,title,x,y,data))
+            page.add(chart(conn,database_type,chart_type,title,x,y,data,style))
         else:
-            chart(conn,database_type,chart_type,title,x,y,data).render(path=title + '.' + save_as)
+            chart(conn,database_type,chart_type,title,x,y,data,style).render(path=title + '.' + save_as)
         n += 1
 
     if all_in_one_page =='1':
