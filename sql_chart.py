@@ -16,6 +16,10 @@ from pyecharts.charts import Funnel
 from pyecharts.charts import Gauge
 from pyecharts.charts import Graph
 
+import json
+import os
+
+
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
         try:
@@ -64,7 +68,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    if ylist[0] != '0':
+    if ylist[0] != '0' and chart_type != 'graph2':
         zdict={}
         for i in range(len(ylist)):
             zdict[ylist[i]]=[]
@@ -137,6 +141,39 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         graph.set_global_opts(title_opts={"text": title})
         graph.add("", nodes, links, repulsion=4000)
         return graph
+    elif chart_type == 'graph2': # 关系图2
+        xs = f_get_query_record(conn, x,database_type)
+        nodes = []
+        for row in xs:
+            if row[4].decode('utf-8') !='':
+                label =eval(row[4].decode('utf-8'))
+            nodes.append({"name": row[0].decode('utf-8'), "symbolSize": row[1],"category": row[2].decode('utf-8'),"draggable": row[3].decode('utf-8'),"label": label,"value": row[5]})
+        ys = f_get_query_record(conn, y,database_type)
+        categories = []
+        for row in ys:
+            categories.append({"name": row[0]})       
+        links = []
+        for row in datas:
+            links.append({"source": row[0], "target": row[1]})
+        
+        c = (
+            Graph()
+            .add(
+                "",
+                nodes,
+                links,
+                categories,
+                repulsion=50,
+                linestyle_opts=opts.LineStyleOpts(curve=0.2),
+                label_opts=opts.LabelOpts(is_show=False),
+            )
+            .set_global_opts(
+                legend_opts=opts.LegendOpts(is_show=False),
+                title_opts=opts.TitleOpts(title="Graph-微博转发关系图"),
+            )
+        )
+        return c
+        
 
 if __name__=="__main__":
     

@@ -85,7 +85,6 @@ def graph_base() -> Graph:
     for i in nodes:
         for j in nodes:
             links.append({"source": i.get("name"), "target": j.get("name")})
-    print (links)
     c = (
         Graph()
         .add("", nodes, links, repulsion=8000)
@@ -93,4 +92,28 @@ def graph_base() -> Graph:
     )
     return c
 
-Page().add(*[fn() for fn, _ in C.charts]).render()
+@C.funcs
+def graph_weibo() -> Graph:
+    with open("weibo.json", "r", encoding="utf-8") as f:
+        j = json.load(f)
+        nodes, links, categories, cont, mid, userl = j
+    c = (
+        Graph()
+        .add(
+            "",
+            nodes,
+            links,
+            categories,
+            repulsion=50,
+            linestyle_opts=opts.LineStyleOpts(curve=0.2),
+            label_opts=opts.LabelOpts(is_show=False),
+        )
+        .set_global_opts(
+            legend_opts=opts.LegendOpts(is_show=False),
+            title_opts=opts.TitleOpts(title="Graph-微博转发关系图"),
+        )
+    )
+    return c
+
+
+Page().add(*[fn() for fn, _ in C.charts]).render('test.html')
