@@ -15,10 +15,14 @@ from pyecharts.charts import Calendar
 from pyecharts.charts import Funnel
 from pyecharts.charts import Gauge
 from pyecharts.charts import Graph
+from pyecharts.charts import Liquid
+from pyecharts.globals import SymbolType
+from pyecharts.charts import Parallel
+from pyecharts.charts import Polar
+from pyecharts.charts import Radar
 
-import json
-import os
-
+import math
+import random
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -68,7 +72,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    if ylist[0] != '0' and chart_type != 'graph2':
+    if ylist[0] != '0' and chart_type != 'graph2' and chart_type != 'graph3':
         zdict={}
         for i in range(len(ylist)):
             zdict[ylist[i]]=[]
@@ -78,33 +82,34 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             zdict[row[1]].append(str(row[2])) #windows
 
     if chart_type == 'line':    # 折线图
-        line = Line()
-        line.set_global_opts(title_opts={"text": title})#{"text": "主标题", "subtext": "副标题"}
-        line.add_xaxis(xlist)
+        c = Line()
+        c.set_global_opts(title_opts={"text": title})#{"text": "主标题", "subtext": "副标题"}
+        c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
-            line.add_yaxis(name, zdict[name],  is_smooth=True) 
-        return line
+            c.add_yaxis(name, zdict[name],  is_smooth=True,label_opts=opts.LabelOpts(is_show=False)) 
+        return c
     elif chart_type == 'pie':# 饼图
-        pie = Pie()
-        pie.set_global_opts(title_opts={"text": title})
+        c = Pie()
+        c.set_global_opts(title_opts={"text": title})
         for i in range(len(ylist)):
             name = ylist[i]
             data_pair = list(zip(xlist,zdict[name]))
-            pie.add(series_name=name,data_pair=data_pair)
-        return pie
+            c.add(series_name=name,data_pair=data_pair)
+        c.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
+        return c
     elif chart_type == 'bar': # 柱形图
-        bar = Bar()
-        bar.set_global_opts(title_opts={"text": title})
-        bar.add_xaxis(xlist)
+        c = Bar()
+        c.set_global_opts(title_opts={"text": title})
+        c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
-            bar.add_yaxis(name, zdict[name]) 
-        return bar
+            c.add_yaxis(name, zdict[name]) 
+        return c
     elif chart_type == 'calendar': # 日历图
-        calendar = Calendar()
-        calendar.add("", datas, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
-        calendar.set_global_opts(
+        c = Calendar()
+        c.add("", datas, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
+        c.set_global_opts(
             title_opts={"text": title},
             visualmap_opts=opts.VisualMapOpts(
             max_=style.setdefault('max_',20000),
@@ -114,23 +119,23 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             pos_top=style.setdefault('pos_top',"230px"),
             pos_left=style.setdefault('pos_left',"100px"))
         )
-        return calendar
+        return c
     elif chart_type == 'funnel': # 漏斗图
-        funnel = Funnel()
-        funnel.set_global_opts(title_opts={"text": title})
-        funnel.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position="inside"))
-        return funnel
+        c = Funnel()
+        c.set_global_opts(title_opts={"text": title})
+        c.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position="inside"))
+        return c
     elif chart_type == 'gauge': # 仪表盘
-        gauge = Gauge()
-        gauge.set_global_opts(title_opts={"text": title})
-        gauge.add("", datas, title_label_opts=opts.LabelOpts(
+        c = Gauge()
+        c.set_global_opts(title_opts={"text": title})
+        c.add("", datas, title_label_opts=opts.LabelOpts(
             font_size=style.setdefault('font_size', 40), 
             color=style.setdefault('color', "blue"), 
             font_family=style.setdefault('font_family', "Microsoft YaHei")
             ))
-        return gauge
+        return c
     elif chart_type == 'graph': # 关系图
-        graph = Graph()
+        c = Graph()
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
         for row in xs:
@@ -138,9 +143,9 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         links = []
         for row in datas:
             links.append({"source": row[0], "target": row[1]})
-        graph.set_global_opts(title_opts={"text": title})
-        graph.add("", nodes, links, repulsion=4000)
-        return graph
+        c.set_global_opts(title_opts={"text": title})
+        c.add("", nodes, links, repulsion=4000)
+        return c
     elif chart_type == 'graph2': # 关系图2
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
@@ -155,7 +160,6 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         links = []
         for row in datas:
             links.append({"source": row[0], "target": row[1]})
-        
         c = (
             Graph()
             .add(
@@ -169,11 +173,125 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             )
             .set_global_opts(
                 legend_opts=opts.LegendOpts(is_show=False),
-                title_opts=opts.TitleOpts(title="Graph-微博转发关系图"),
+                title_opts=opts.TitleOpts(title=title),
             )
         )
         return c
-        
+    elif chart_type == 'graph3': # 关系图3
+        xs = f_get_query_record(conn, x,database_type)
+        nodes = []
+        for row in xs:
+            if row[4] !='':
+                label =eval(row[4])
+            nodes.append({"id": row[0],"name": row[1], "symbolSize": float(row[2]),"category": int(row[3]),"label": label,"value": float(row[5]),"x": float(row[6]),"y": float(row[7])})
+        ys = f_get_query_record(conn, y,database_type)
+        categories = []
+        for row in ys:
+            categories.append({"name": row[0]})       
+        links = []
+        for row in datas:
+            links.append({"id": row[0], "source": row[1], "target": row[2]})
+        c = (
+            Graph(init_opts=opts.InitOpts(width="1000px", height="600px"))
+            .add(
+                "",
+                nodes=nodes,
+                links=links,
+                categories=categories,
+                layout="circular",
+                is_rotate_label=True,
+                linestyle_opts=opts.LineStyleOpts(color="source", curve=0.3),
+                label_opts=opts.LabelOpts(position="right"),
+            )
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=title),
+                legend_opts=opts.LegendOpts(
+                    orient="vertical", pos_left="2%", pos_top="20%"
+                ),
+            )
+        )
+        return c
+    elif chart_type == 'graph4': # 关系图4
+        xs = f_get_query_record(conn, x,database_type)
+        nodes = []
+        for row in xs:
+            nodes.append({
+                "x": float(row[0]),
+                "y": float(row[1]),
+                "id": row[2],
+                "name": row[3], 
+                "symbolSize": float(row[4]),
+                "itemStyle": eval(row[5])
+                })
+        links = []
+        for row in datas:
+            links.append({"source": row[0], "target": row[1]})
+        #file=open('a.txt','w')  
+        #file.writelines([str(line)+"\n" for line in nodes]);  
+        #file.close() 
+        c = (
+            Graph(init_opts=opts.InitOpts(width="1000px", height="600px"))
+            .add(
+                "",
+                nodes=nodes,
+                links=links,
+                layout="none",
+                label_opts=opts.LabelOpts(is_show=False),
+                linestyle_opts=opts.LineStyleOpts(width=0.5, curve=0.3, opacity=0.7),
+            )
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
+    elif chart_type == 'liquid': # 水球图
+        c = Liquid()
+        c.set_global_opts(title_opts={"text": title})
+        c.add("lq", datas, is_outline_show=style.setdefault('is_outline_show',True))
+        return c
+    elif chart_type == 'parallel': # 平行坐标系
+        xs = f_get_query_record(conn, x,database_type)
+        schemas = []
+        for row in xs:
+            strdata = row[3]
+            datalist = strdata.split(",")
+            schemas.append({"dim": row[0], "name": row[1], "type_": row[2], "data": datalist})
+        c = Parallel()
+        c.set_global_opts(title_opts={"text": title})
+        c.add_schema(schemas)
+        c.add("parallel", datas)
+        return c
+    elif chart_type == 'polar': # 极坐标系
+        c = (
+            Polar()
+            .add("", datas, type_="scatter", label_opts=opts.LabelOpts(is_show=False))
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
+    elif chart_type == 'radar': # 雷达图
+        xs = f_get_query_record(conn, x,database_type)
+        schemas = []
+        for row in xs:
+            schemas.append({"name": row[0], "max_": row[1]})
+        c = Radar()
+        c.add_schema(schemas)
+        for row in datas:
+            v =[]
+            v.append(row[1:7])
+            c.add(row[0], v)
+        c.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        c.set_global_opts(title_opts=opts.TitleOpts(title=title))
+        return c
+
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__=="__main__":
     
