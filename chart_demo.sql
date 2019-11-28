@@ -2801,14 +2801,59 @@ CREATE TABLE `t_radar_data` (
   `c4` int(6) DEFAULT NULL,
   `c5` int(6) DEFAULT NULL,
   `c6` int(6) DEFAULT NULL,
+  `color` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `t_radar_data` */
 
-insert  into `t_radar_data`(`id`,`type`,`c1`,`c2`,`c3`,`c4`,`c5`,`c6`) values 
-(1,'预算分配',4300,10000,28000,35000,50000,19000),
-(2,'实际开销',5000,14000,28000,31000,42000,21000);
+insert  into `t_radar_data`(`id`,`type`,`c1`,`c2`,`c3`,`c4`,`c5`,`c6`,`color`) values 
+(1,'预算分配',4300,10000,28000,35000,50000,19000,'#f9713c'),
+(2,'实际开销',5000,14000,28000,31000,42000,21000,'#b3e4a1');
+
+/*Table structure for table `t_radar_data2` */
+
+DROP TABLE IF EXISTS `t_radar_data2`;
+
+CREATE TABLE `t_radar_data2` (
+  `id` int(5) NOT NULL DEFAULT '0',
+  `name` varchar(20) DEFAULT NULL,
+  `c1` int(6) DEFAULT NULL,
+  `c2` int(6) DEFAULT NULL,
+  `c3` int(6) DEFAULT NULL,
+  `c4` int(6) DEFAULT NULL,
+  `c5` int(6) DEFAULT NULL,
+  `c6` int(6) DEFAULT NULL,
+  `color` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_radar_data2` */
+
+insert  into `t_radar_data2`(`id`,`name`,`c1`,`c2`,`c3`,`c4`,`c5`,`c6`,`color`) values 
+(1,'北京',267,216,280,2,108,64,'#f9713c'),
+(2,'北京',25,11,21,2,34,9,'#f9713c'),
+(3,'北京',56,7,63,2,5,5,'#f9713c'),
+(4,'北京',33,7,29,1,6,6,'#f9713c'),
+(5,'北京',42,24,44,2,16,16,'#f9713c'),
+(6,'北京',82,58,90,1,33,33,'#f9713c'),
+(7,'北京',74,49,77,2,27,27,'#f9713c'),
+(8,'北京',78,55,80,1,29,29,'#f9713c'),
+(1,'北京',55,9,56,1,18,6,'#f9713c'),
+(10,'北京',185,127,216,1,61,27,'#f9713c'),
+(11,'北京',39,19,1,2,31,15,'#f9713c'),
+(12,'北京',41,11,1,1,21,7,'#f9713c'),
+(1,'上海',91,45,125,1,34,23,'#b3e4a1'),
+(2,'上海',65,27,78,2,45,29,'#b3e4a1'),
+(3,'上海',83,60,84,1,73,28,'#b3e4a1'),
+(4,'上海',109,81,121,2,68,27,'#b3e4a1'),
+(5,'上海',106,77,114,1,55,51,'#b3e4a1'),
+(6,'上海',109,78,121,2,26,51,'#b3e4a1'),
+(7,'上海',106,65,114,1,17,51,'#b3e4a1'),
+(8,'上海',89,33,78,2,24,51,'#b3e4a1'),
+(9,'上海',53,55,47,1,24,25,'#b3e4a1'),
+(10,'上海',80,81,80,2,42,17,'#b3e4a1'),
+(11,'上海',117,71,124,1,33,25,'#b3e4a1'),
+(12,'上海',99,67,142,2,25,42,'#b3e4a1');
 
 /*Table structure for table `t_radar_x` */
 
@@ -2818,18 +2863,209 @@ CREATE TABLE `t_radar_x` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT NULL,
   `max` int(6) DEFAULT NULL,
+  `min` int(6) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `t_radar_x` */
 
-insert  into `t_radar_x`(`id`,`name`,`max`) values 
-(1,'销售',6500),
-(2,'管理',16000),
-(3,'信息技术',30000),
-(4,'客服',38000),
-(5,'研发',52000),
-(6,'市场',25000);
+insert  into `t_radar_x`(`id`,`name`,`max`,`min`) values 
+(1,'销售',6500,NULL),
+(2,'管理',16000,NULL),
+(3,'信息技术',30000,NULL),
+(4,'客服',38000,NULL),
+(5,'研发',52000,NULL),
+(6,'市场',25000,NULL);
+
+/*Table structure for table `t_radar_x2` */
+
+DROP TABLE IF EXISTS `t_radar_x2`;
+
+CREATE TABLE `t_radar_x2` (
+  `id` int(2) NOT NULL DEFAULT '0',
+  `name` varchar(20) DEFAULT NULL,
+  `max` int(6) DEFAULT NULL,
+  `min` int(6) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_radar_x2` */
+
+insert  into `t_radar_x2`(`id`,`name`,`max`,`min`) values 
+(1,'AQI',300,5),
+(2,'PM2.5',250,20),
+(3,'PM10',300,5),
+(4,'CO',5,NULL),
+(5,'NO2',200,NULL),
+(0,'SO2',100,NULL);
+
+/*Table structure for table `t_sankey_data` */
+
+DROP TABLE IF EXISTS `t_sankey_data`;
+
+CREATE TABLE `t_sankey_data` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `source` varchar(50) DEFAULT NULL,
+  `target` varchar(50) DEFAULT NULL,
+  `value` float DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_sankey_data` */
+
+insert  into `t_sankey_data`(`id`,`source`,`target`,`value`) values 
+(1,'Agricultural \'waste\'','Bio-conversion',124.729),
+(2,'Bio-conversion','Liquid',0.597),
+(3,'Bio-conversion','Losses',26.862),
+(4,'Bio-conversion','Solid',280.322),
+(5,'Bio-conversion','Gas',81.144),
+(6,'Biofuel imports','Liquid',35),
+(7,'Biomass imports','Solid',35),
+(8,'Coal imports','Coal',11.606),
+(9,'Coal reserves','Coal',63.965),
+(10,'Coal','Solid',75.571),
+(11,'District heating','Industry',10.639),
+(12,'District heating','Heating and cooling - commercial',22.505),
+(13,'District heating','Heating and cooling - homes',46.184),
+(14,'Electricity grid','Over generation / exports',104.453),
+(15,'Electricity grid','Heating and cooling - homes',113.726),
+(16,'Electricity grid','H2 conversion',27.14),
+(17,'Electricity grid','Industry',342.165),
+(18,'Electricity grid','Road transport',37.797),
+(19,'Electricity grid','Agriculture',4.412),
+(20,'Electricity grid','Heating and cooling - commercial',40.858),
+(21,'Electricity grid','Losses',56.691),
+(22,'Electricity grid','Rail transport',7.863),
+(23,'Electricity grid','Lighting & appliances - commercial',90.008),
+(24,'Electricity grid','Lighting & appliances - homes',93.494),
+(25,'Gas imports','Ngas',40.719),
+(26,'Gas reserves','Ngas',82.233),
+(27,'Gas','Heating and cooling - commercial',0.129),
+(28,'Gas','Losses',1.401),
+(29,'Gas','Thermal generation',151.891),
+(30,'Gas','Agriculture',2.096),
+(31,'Gas','Industry',48.58),
+(32,'Geothermal','Electricity grid',7.013),
+(33,'H2 conversion','H2',20.897),
+(34,'H2 conversion','Losses',6.242),
+(35,'H2','Road transport',20.897),
+(36,'Hydro','Electricity grid',6.995),
+(37,'Liquid','Industry',121.066),
+(38,'Liquid','International shipping',128.69),
+(39,'Liquid','Road transport',135.835),
+(40,'Liquid','Domestic aviation',14.458),
+(41,'Liquid','International aviation',206.267),
+(42,'Liquid','Agriculture',3.64),
+(43,'Liquid','National navigation',33.218),
+(44,'Liquid','Rail transport',4.413),
+(45,'Marine algae','Bio-conversion',4.375),
+(46,'Ngas','Gas',122.952),
+(47,'Nuclear','Thermal generation',839.978),
+(48,'Oil imports','Oil',504.287),
+(49,'Oil reserves','Oil',107.703),
+(50,'Oil','Liquid',611.99),
+(51,'Other waste','Solid',56.587),
+(52,'Other waste','Bio-conversion',77.81),
+(53,'Pumped heat','Heating and cooling - homes',193.026),
+(54,'Pumped heat','Heating and cooling - commercial',70.672),
+(55,'Solar PV','Electricity grid',59.901),
+(56,'Solar Thermal','Heating and cooling - homes',19.263),
+(57,'Solar','Solar Thermal',19.263),
+(58,'Solar','Solar PV',59.901),
+(59,'Solid','Agriculture',0.882),
+(60,'Solid','Thermal generation',400.12),
+(61,'Solid','Industry',46.477),
+(62,'Thermal generation','Electricity grid',525.531),
+(63,'Thermal generation','Losses',787.129),
+(64,'Thermal generation','District heating',79.329),
+(65,'Tidal','Electricity grid',9.452),
+(66,'UK land based bioenergy','Bio-conversion',182.01),
+(67,'Wave','Electricity grid',19.013),
+(68,'Wind','Electricity grid',289.366);
+
+/*Table structure for table `t_sankey_x` */
+
+DROP TABLE IF EXISTS `t_sankey_x`;
+
+CREATE TABLE `t_sankey_x` (
+  `id` int(3) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_sankey_x` */
+
+insert  into `t_sankey_x`(`id`,`name`) values 
+(1,'Agricultural \'waste\''),
+(2,'Bio-conversion'),
+(3,'Liquid'),
+(4,'Losses'),
+(5,'Solid'),
+(6,'Gas'),
+(7,'Biofuel imports'),
+(8,'Biomass imports'),
+(9,'Coal imports'),
+(10,'Coal'),
+(11,'Coal reserves'),
+(12,'District heating'),
+(13,'Industry'),
+(14,'Heating and cooling - commercial'),
+(15,'Heating and cooling - homes'),
+(16,'Electricity grid'),
+(17,'Over generation / exports'),
+(18,'H2 conversion'),
+(19,'Road transport'),
+(20,'Agriculture'),
+(21,'Rail transport'),
+(22,'Lighting & appliances - commercial'),
+(23,'Lighting & appliances - homes'),
+(24,'Gas imports'),
+(25,'Ngas'),
+(26,'Gas reserves'),
+(27,'Thermal generation'),
+(28,'Geothermal'),
+(29,'H2'),
+(30,'Hydro'),
+(31,'International shipping'),
+(32,'Domestic aviation'),
+(33,'International aviation'),
+(34,'National navigation'),
+(35,'Marine algae'),
+(36,'Nuclear'),
+(37,'Oil imports'),
+(38,'Oil'),
+(39,'Oil reserves'),
+(40,'Other waste'),
+(41,'Pumped heat'),
+(42,'Solar PV'),
+(43,'Solar Thermal'),
+(44,'Solar'),
+(45,'Tidal'),
+(46,'UK land based bioenergy'),
+(47,'Wave'),
+(48,'Wind');
+
+/*Table structure for table `t_sunburst` */
+
+DROP TABLE IF EXISTS `t_sunburst`;
+
+CREATE TABLE `t_sunburst` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `tree` json DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_sunburst` */
+
+insert  into `t_sunburst`(`id`,`tree`) values 
+(3,'{\"name\": \"Flora\", \"children\": [{\"name\": \"Black Tea\", \"value\": 1, \"itemStyle\": {\"color\": \"#975e6d\"}}, {\"name\": \"Floral\", \"children\": [{\"name\": \"Chamomile\", \"value\": 1, \"itemStyle\": {\"color\": \"#f99e1c\"}}, {\"name\": \"Rose\", \"value\": 1, \"itemStyle\": {\"color\": \"#ef5a78\"}}, {\"name\": \"Jasmine\", \"value\": 1, \"itemStyle\": {\"color\": \"#f7f1bd\"}}], \"itemStyle\": {\"color\": \"#e0719c\"}}], \"itemStyle\": {\"color\": \"#da0d68\"}}'),
+(4,'{\"name\": \"Fruity\", \"children\": [{\"name\": \"Berry\", \"children\": [{\"name\": \"Blackberry\", \"value\": 1, \"itemStyle\": {\"color\": \"#3e0317\"}}, {\"name\": \"Raspberry\", \"value\": 1, \"itemStyle\": {\"color\": \"#e62969\"}}, {\"name\": \"Blueberry\", \"value\": 1, \"itemStyle\": {\"color\": \"#6569b0\"}}, {\"name\": \"Strawberry\", \"value\": 1, \"itemStyle\": {\"color\": \"#ef2d36\"}}], \"itemStyle\": {\"color\": \"#dd4c51\"}}, {\"name\": \"Dried Fruit\", \"children\": [{\"name\": \"Raisin\", \"value\": 1, \"itemStyle\": {\"color\": \"#b53b54\"}}, {\"name\": \"Prune\", \"value\": 1, \"itemStyle\": {\"color\": \"#a5446f\"}}], \"itemStyle\": {\"color\": \"#c94a44\"}}, {\"name\": \"Other Fruit\", \"children\": [{\"name\": \"Coconut\", \"value\": 1, \"itemStyle\": {\"color\": \"#f2684b\"}}, {\"name\": \"Cherry\", \"value\": 1, \"itemStyle\": {\"color\": \"#e73451\"}}, {\"name\": \"Pomegranate\", \"value\": 1, \"itemStyle\": {\"color\": \"#e65656\"}}, {\"name\": \"Pineapple\", \"value\": 1, \"itemStyle\": {\"color\": \"#f89a1c\"}}, {\"name\": \"Grape\", \"value\": 1, \"itemStyle\": {\"color\": \"#aeb92c\"}}, {\"name\": \"Apple\", \"value\": 1, \"itemStyle\": {\"color\": \"#4eb849\"}}, {\"name\": \"Peach\", \"value\": 1, \"itemStyle\": {\"color\": \"#f68a5c\"}}, {\"name\": \"Pear\", \"value\": 1, \"itemStyle\": {\"color\": \"#baa635\"}}], \"itemStyle\": {\"color\": \"#dd4c51\"}}, {\"name\": \"Citrus Fruit\", \"children\": [{\"name\": \"Grapefruit\", \"value\": 1, \"itemStyle\": {\"color\": \"#f26355\"}}, {\"name\": \"Orange\", \"value\": 1, \"itemStyle\": {\"color\": \"#e2631e\"}}, {\"name\": \"Lemon\", \"value\": 1, \"itemStyle\": {\"color\": \"#fde404\"}}, {\"name\": \"Lime\", \"value\": 1, \"itemStyle\": {\"color\": \"#7eb138\"}}], \"itemStyle\": {\"color\": \"#f7a128\"}}], \"itemStyle\": {\"color\": \"#da1d23\"}}'),
+(5,'{\"name\": \"Sour Fermented\", \"children\": [{\"name\": \"Sour\", \"children\": [{\"name\": \"Sour Aromatics\", \"value\": 1, \"itemStyle\": {\"color\": \"#9ea718\"}}, {\"name\": \"Acetic Acid\", \"value\": 1, \"itemStyle\": {\"color\": \"#94a76f\"}}, {\"name\": \"Butyric Acid\", \"value\": 1, \"itemStyle\": {\"color\": \"#d0b24f\"}}, {\"name\": \"Isovaleric Acid\", \"value\": 1, \"itemStyle\": {\"color\": \"#8eb646\"}}, {\"name\": \"Citric Acid\", \"value\": 1, \"itemStyle\": {\"color\": \"#faef07\"}}, {\"name\": \"Malic Acid\", \"value\": 1, \"itemStyle\": {\"color\": \"#c1ba07\"}}], \"itemStyle\": {\"color\": \"#e1c315\"}}, {\"name\": \"Alcohol Fremented\", \"children\": [{\"name\": \"Winey\", \"value\": 1, \"itemStyle\": {\"color\": \"#8f1c53\"}}, {\"name\": \"Whiskey\", \"value\": 1, \"itemStyle\": {\"color\": \"#b34039\"}}, {\"name\": \"Fremented\", \"value\": 1, \"itemStyle\": {\"color\": \"#ba9232\"}}, {\"name\": \"Overripe\", \"value\": 1, \"itemStyle\": {\"color\": \"#8b6439\"}}], \"itemStyle\": {\"color\": \"#b09733\"}}], \"itemStyle\": {\"color\": \"#ebb40f\"}}'),
+(6,'{\"name\": \"Green Vegetative\", \"children\": [{\"name\": \"Olive Oil\", \"value\": 1, \"itemStyle\": {\"color\": \"#a2b029\"}}, {\"name\": \"Raw\", \"value\": 1, \"itemStyle\": {\"color\": \"#718933\"}}, {\"name\": \"Green Vegetative\", \"children\": [{\"name\": \"Under-ripe\", \"value\": 1, \"itemStyle\": {\"color\": \"#a2bb2b\"}}, {\"name\": \"Peapod\", \"value\": 1, \"itemStyle\": {\"color\": \"#62aa3c\"}}, {\"name\": \"Fresh\", \"value\": 1, \"itemStyle\": {\"color\": \"#03a653\"}}, {\"name\": \"Dark Green\", \"value\": 1, \"itemStyle\": {\"color\": \"#038549\"}}, {\"name\": \"Vegetative\", \"value\": 1, \"itemStyle\": {\"color\": \"#28b44b\"}}, {\"name\": \"Hay-like\", \"value\": 1, \"itemStyle\": {\"color\": \"#a3a830\"}}, {\"name\": \"Herb-like\", \"value\": 1, \"itemStyle\": {\"color\": \"#7ac141\"}}], \"itemStyle\": {\"color\": \"#3aa255\"}}, {\"name\": \"Beany\", \"value\": 1, \"itemStyle\": {\"color\": \"#5e9a80\"}}], \"itemStyle\": {\"color\": \"#187a2f\"}}'),
+(7,'{\"name\": \"Other\", \"children\": [{\"name\": \"Papery/Musty\", \"children\": [{\"name\": \"Stale\", \"value\": 1, \"itemStyle\": {\"color\": \"#8b8c90\"}}, {\"name\": \"Cardboard\", \"value\": 1, \"itemStyle\": {\"color\": \"#beb276\"}}, {\"name\": \"Papery\", \"value\": 1, \"itemStyle\": {\"color\": \"#fefef4\"}}, {\"name\": \"Woody\", \"value\": 1, \"itemStyle\": {\"color\": \"#744e03\"}}, {\"name\": \"Moldy/Damp\", \"value\": 1, \"itemStyle\": {\"color\": \"#a3a36f\"}}, {\"name\": \"Musty/Dusty\", \"value\": 1, \"itemStyle\": {\"color\": \"#c9b583\"}}, {\"name\": \"Musty/Earthy\", \"value\": 1, \"itemStyle\": {\"color\": \"#978847\"}}, {\"name\": \"Animalic\", \"value\": 1, \"itemStyle\": {\"color\": \"#9d977f\"}}, {\"name\": \"Meaty Brothy\", \"value\": 1, \"itemStyle\": {\"color\": \"#cc7b6a\"}}, {\"name\": \"Phenolic\", \"value\": 1, \"itemStyle\": {\"color\": \"#db646a\"}}], \"itemStyle\": {\"color\": \"#9db2b7\"}}, {\"name\": \"Chemical\", \"children\": [{\"name\": \"Bitter\", \"value\": 1, \"itemStyle\": {\"color\": \"#80a89d\"}}, {\"name\": \"Salty\", \"value\": 1, \"itemStyle\": {\"color\": \"#def2fd\"}}, {\"name\": \"Medicinal\", \"value\": 1, \"itemStyle\": {\"color\": \"#7a9bae\"}}, {\"name\": \"Petroleum\", \"value\": 1, \"itemStyle\": {\"color\": \"#039fb8\"}}, {\"name\": \"Skunky\", \"value\": 1, \"itemStyle\": {\"color\": \"#5e777b\"}}, {\"name\": \"Rubber\", \"value\": 1, \"itemStyle\": {\"color\": \"#120c0c\"}}], \"itemStyle\": {\"color\": \"#76c0cb\"}}], \"itemStyle\": {\"color\": \"#0aa3b5\"}}'),
+(8,'{\"name\": \"Roasted\", \"children\": [{\"name\": \"Pipe Tobacco\", \"value\": 1, \"itemStyle\": {\"color\": \"#caa465\"}}, {\"name\": \"Tobacco\", \"value\": 1, \"itemStyle\": {\"color\": \"#dfbd7e\"}}, {\"name\": \"Burnt\", \"children\": [{\"name\": \"Acrid\", \"value\": 1, \"itemStyle\": {\"color\": \"#b9a449\"}}, {\"name\": \"Ashy\", \"value\": 1, \"itemStyle\": {\"color\": \"#899893\"}}, {\"name\": \"Smoky\", \"value\": 1, \"itemStyle\": {\"color\": \"#a1743b\"}}, {\"name\": \"Brown, Roast\", \"value\": 1, \"itemStyle\": {\"color\": \"#894810\"}}], \"itemStyle\": {\"color\": \"#be8663\"}}, {\"name\": \"Cereal\", \"children\": [{\"name\": \"Grain\", \"value\": 1, \"itemStyle\": {\"color\": \"#b7906f\"}}, {\"name\": \"Malt\", \"value\": 1, \"itemStyle\": {\"color\": \"#eb9d5f\"}}], \"itemStyle\": {\"color\": \"#ddaf61\"}}], \"itemStyle\": {\"color\": \"#c94930\"}}'),
+(9,'{\"name\": \"Spices\", \"children\": [{\"name\": \"Pungent\", \"value\": 1, \"itemStyle\": {\"color\": \"#794752\"}}, {\"name\": \"Pepper\", \"value\": 1, \"itemStyle\": {\"color\": \"#cc3d41\"}}, {\"name\": \"Brown Spice\", \"children\": [{\"name\": \"Anise\", \"value\": 1, \"itemStyle\": {\"color\": \"#c78936\"}}, {\"name\": \"Nutmeg\", \"value\": 1, \"itemStyle\": {\"color\": \"#8c292c\"}}, {\"name\": \"Cinnamon\", \"value\": 1, \"itemStyle\": {\"color\": \"#e5762e\"}}, {\"name\": \"Clove\", \"value\": 1, \"itemStyle\": {\"color\": \"#a16c5a\"}}], \"itemStyle\": {\"color\": \"#b14d57\"}}], \"itemStyle\": {\"color\": \"#ad213e\"}}'),
+(10,'{\"name\": \"Nutty Cocoa\", \"children\": [{\"name\": \"Nutty\", \"children\": [{\"name\": \"Peanuts\", \"value\": 1, \"itemStyle\": {\"color\": \"#d4ad12\"}}, {\"name\": \"Hazelnut\", \"value\": 1, \"itemStyle\": {\"color\": \"#9d5433\"}}, {\"name\": \"Almond\", \"value\": 1, \"itemStyle\": {\"color\": \"#c89f83\"}}], \"itemStyle\": {\"color\": \"#c78869\"}}, {\"name\": \"Cocoa\", \"children\": [{\"name\": \"Chocolate\", \"value\": 1, \"itemStyle\": {\"color\": \"#692a19\"}}, {\"name\": \"Dark Chocolate\", \"value\": 1, \"itemStyle\": {\"color\": \"#470604\"}}], \"itemStyle\": {\"color\": \"#bb764c\"}}], \"itemStyle\": {\"color\": \"#a87b64\"}}'),
+(11,'{\"name\": \"Sweet\", \"children\": [{\"name\": \"Brown Sugar\", \"children\": [{\"name\": \"Molasses\", \"value\": 1, \"itemStyle\": {\"color\": \"#310d0f\"}}, {\"name\": \"Maple Syrup\", \"value\": 1, \"itemStyle\": {\"color\": \"#ae341f\"}}, {\"name\": \"Caramelized\", \"value\": 1, \"itemStyle\": {\"color\": \"#d78823\"}}, {\"name\": \"Honey\", \"value\": 1, \"itemStyle\": {\"color\": \"#da5c1f\"}}], \"itemStyle\": {\"color\": \"#d45a59\"}}, {\"name\": \"Vanilla\", \"value\": 1, \"itemStyle\": {\"color\": \"#f89a80\"}}, {\"name\": \"Vanillin\", \"value\": 1, \"itemStyle\": {\"color\": \"#f37674\"}}, {\"name\": \"Overall Sweet\", \"value\": 1, \"itemStyle\": {\"color\": \"#e75b68\"}}, {\"name\": \"Sweet Aromatics\", \"value\": 1, \"itemStyle\": {\"color\": \"#d0545f\"}}], \"itemStyle\": {\"color\": \"#e65832\"}}');
 
 /*Table structure for table `t_weibo_categories` */
 

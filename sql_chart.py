@@ -10,17 +10,21 @@ import getopt
 import sys
 import configparser
 from pyecharts import options as opts
+from pyecharts.globals import SymbolType
 from pyecharts.charts import Page,Pie,Bar,Line
 from pyecharts.charts import Calendar
 from pyecharts.charts import Funnel
 from pyecharts.charts import Gauge
 from pyecharts.charts import Graph
 from pyecharts.charts import Liquid
-from pyecharts.globals import SymbolType
 from pyecharts.charts import Parallel
 from pyecharts.charts import Polar
 from pyecharts.charts import Radar
+from pyecharts.charts import Sankey
+from pyecharts.charts import Sunburst
 
+import os
+import json
 import math
 import random
 
@@ -87,7 +91,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
-            c.add_yaxis(name, zdict[name],  is_smooth=True,label_opts=opts.LabelOpts(is_show=False)) 
+            c.add_yaxis(name, zdict[name],markpoint_opts=opts.MarkPointOpts(data=[opts.MarkPointItem(type_="max")]),is_smooth=True,label_opts=opts.LabelOpts(is_show=False)) 
         return c
     elif chart_type == 'pie':# 饼图
         c = Pie()
@@ -270,18 +274,77 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         xs = f_get_query_record(conn, x,database_type)
         schemas = []
         for row in xs:
-            schemas.append({"name": row[0], "max_": row[1]})
+            schemas.append({"name": row[0], "max_": row[1], "min_": row[2]})
         c = Radar()
         c.add_schema(schemas)
+        v =[]
+        name =''
+        color=''
         for row in datas:
-            v =[]
-            v.append(row[1:7])
-            c.add(row[0], v)
+            if row[0]!=name:
+                if len(v)>0:
+                    c.add(name, v, color=color)
+                    v =[]
+                name = row[0]
+                color = row[1]
+            v.append(row[2:])
+        c.add(name, v, color=color)
         c.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
         c.set_global_opts(title_opts=opts.TitleOpts(title=title))
         return c
-
-
+    elif chart_type == 'sankey': # 桑基图
+        xs = f_get_query_record(conn, x,database_type)
+        nodes = []
+        for row in xs:
+            nodes.append({"name": row[0]})
+        links = []
+        for row in datas:
+            links.append({"source": row[0], "target": row[1], "value": row[2]})
+        c = (
+            Sankey()
+            .add(
+                "sankey",
+                nodes=nodes,
+                links=links,
+                linestyle_opt=opts.LineStyleOpts(opacity=0.2, curve=0.5, color="source"),
+                label_opts=opts.LabelOpts(position="right"),
+            )
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
+    elif chart_type == 'sunburst': # 旭日图
+        j = []
+        for row in datas:
+            j.append(eval(row[0]))
+        c = (
+            Sunburst(init_opts=opts.InitOpts(width="1000px", height="600px"))
+            .add(
+            "",
+            data_pair=j,
+            highlight_policy="ancestor",
+            radius=[0, "95%"],
+            sort_="null",
+            levels=[
+                {},
+                {
+                    "r0": "15%",
+                    "r": "35%",
+                    "itemStyle": {"borderWidth": 2},
+                    "label": {"rotate": "tangential"},
+                },
+                {"r0": "35%", "r": "70%", "label": {"align": "right"}},
+                {
+                    "r0": "70%",
+                    "r": "72%",
+                    "label": {"position": "outside", "padding": 3, "silent": False},
+                    "itemStyle": {"borderWidth": 3},
+                },
+            ],
+        )
+        .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}"))
+        )
+        return c
 
 
 
