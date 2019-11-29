@@ -56,3 +56,11 @@ python SendEmail.py -p emailset.ini -f my_chart1.html,my_chart2.html
 use crontab regularly perform sql_chart.sh,auto generate html chart,and send email.
 
 Enjoy it!
+
+## 好用的DBA系列，喜欢的打颗星：
+
+- [MySQL_Watcher：数据库的HTML监控报告](https://github.com/kinghows/MySQL_Watcher)
+
+- [SQL_Report：自定义SQL生成HTML报告](https://github.com/kinghows/SQL_Report)
+
+- [SQL_Chart：自定义SQL生成HTML图表报告](https://github.com/kinghows/SQL_Chart)
