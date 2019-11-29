@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 # coding: utf-8
 
-# SQL Chart V0.1.0
+# SQL Chart V1.0.0
 # Export SQL to HTML chart.
 # Copyright (C) 2019-2019 Kinghow - Kinghow@hotmail.com
 # Git repository available at https://github.com/kinghows/SQL_Chart
@@ -22,6 +22,8 @@ from pyecharts.charts import Polar
 from pyecharts.charts import Radar
 from pyecharts.charts import Sankey
 from pyecharts.charts import Sunburst
+from pyecharts.charts import ThemeRiver
+from pyecharts.charts import WordCloud
 
 import os
 import json
@@ -91,7 +93,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
-            c.add_yaxis(name, zdict[name],markpoint_opts=opts.MarkPointOpts(data=[opts.MarkPointItem(type_="max")]),is_smooth=True,label_opts=opts.LabelOpts(is_show=False)) 
+            c.add_yaxis(name, zdict[name],
+                markpoint_opts=opts.MarkPointOpts(data=[opts.MarkPointItem(type_=style.setdefault('type_',"max"))]),
+                                            is_smooth=style.setdefault('is_smooth',True),
+                                            label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False))) 
         return c
     elif chart_type == 'pie':# 饼图
         c = Pie()
@@ -127,7 +132,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     elif chart_type == 'funnel': # 漏斗图
         c = Funnel()
         c.set_global_opts(title_opts={"text": title})
-        c.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position="inside"))
+        c.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position=style.setdefault('position',"inside")))
         return c
     elif chart_type == 'gauge': # 仪表盘
         c = Gauge()
@@ -148,7 +153,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         for row in datas:
             links.append({"source": row[0], "target": row[1]})
         c.set_global_opts(title_opts={"text": title})
-        c.add("", nodes, links, repulsion=4000)
+        c.add("", nodes, links, repulsion=style.setdefault('repulsion',4000))
         return c
     elif chart_type == 'graph2': # 关系图2
         xs = f_get_query_record(conn, x,database_type)
@@ -171,12 +176,12 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 nodes,
                 links,
                 categories,
-                repulsion=50,
+                repulsion=style.setdefault('repulsion',50),
                 linestyle_opts=opts.LineStyleOpts(curve=0.2),
-                label_opts=opts.LabelOpts(is_show=False),
+                label_opts=opts.LabelOpts(is_show=style.setdefault('label_opts_is_show',False)),
             )
             .set_global_opts(
-                legend_opts=opts.LegendOpts(is_show=False),
+                legend_opts=opts.LegendOpts(is_show=style.setdefault('legend_opts_is_show',False)),
                 title_opts=opts.TitleOpts(title=title),
             )
         )
@@ -202,15 +207,15 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 nodes=nodes,
                 links=links,
                 categories=categories,
-                layout="circular",
-                is_rotate_label=True,
-                linestyle_opts=opts.LineStyleOpts(color="source", curve=0.3),
-                label_opts=opts.LabelOpts(position="right"),
+                layout=style.setdefault('layout',"circular"),
+                is_rotate_label=style.setdefault('is_rotate_label',True),
+                linestyle_opts=opts.LineStyleOpts(color=style.setdefault('color',"source"), curve=style.setdefault('curve',0.3)),
+                label_opts=opts.LabelOpts(position=style.setdefault('position',"right")),
             )
             .set_global_opts(
                 title_opts=opts.TitleOpts(title=title),
                 legend_opts=opts.LegendOpts(
-                    orient="vertical", pos_left="2%", pos_top="20%"
+                    orient=style.setdefault('orient',"vertical"), pos_left=style.setdefault('pos_left',"2%"), pos_top=style.setdefault('pos_top',"20%")
                 ),
             )
         )
@@ -239,9 +244,9 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 "",
                 nodes=nodes,
                 links=links,
-                layout="none",
-                label_opts=opts.LabelOpts(is_show=False),
-                linestyle_opts=opts.LineStyleOpts(width=0.5, curve=0.3, opacity=0.7),
+                layout=style.setdefault('layout',"none"),
+                label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)),
+                linestyle_opts=opts.LineStyleOpts(width=style.setdefault('width',0.5), curve=style.setdefault('curve',0.3), opacity=style.setdefault('opacity',0.7)),
             )
             .set_global_opts(title_opts=opts.TitleOpts(title=title))
         )
@@ -266,7 +271,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     elif chart_type == 'polar': # 极坐标系
         c = (
             Polar()
-            .add("", datas, type_="scatter", label_opts=opts.LabelOpts(is_show=False))
+            .add("", datas, type_=style.setdefault('type_',"scatter"), label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
             .set_global_opts(title_opts=opts.TitleOpts(title=title))
         )
         return c
@@ -289,7 +294,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 color = row[1]
             v.append(row[2:])
         c.add(name, v, color=color)
-        c.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        c.set_series_opts(label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
         c.set_global_opts(title_opts=opts.TitleOpts(title=title))
         return c
     elif chart_type == 'sankey': # 桑基图
@@ -306,8 +311,8 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 "sankey",
                 nodes=nodes,
                 links=links,
-                linestyle_opt=opts.LineStyleOpts(opacity=0.2, curve=0.5, color="source"),
-                label_opts=opts.LabelOpts(position="right"),
+                linestyle_opt=opts.LineStyleOpts(opacity=style.setdefault('opacity',0.2), curve=style.setdefault('curve',0.5), color=style.setdefault('color',"source")),
+                label_opts=opts.LabelOpts(position=style.setdefault('position',"right")),
             )
             .set_global_opts(title_opts=opts.TitleOpts(title=title))
         )
@@ -321,10 +326,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             .add(
             "",
             data_pair=j,
-            highlight_policy="ancestor",
-            radius=[0, "95%"],
-            sort_="null",
-            levels=[
+            highlight_policy=style.setdefault('highlight_policy',"ancestor"),
+            radius=style.setdefault('radius',[0, "95%"]),
+            sort_=style.setdefault('sort_',"null"),
+            levels=style.setdefault('levels',[
                 {},
                 {
                     "r0": "15%",
@@ -339,14 +344,30 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                     "label": {"position": "outside", "padding": 3, "silent": False},
                     "itemStyle": {"borderWidth": 3},
                 },
-            ],
+            ],)
         )
         .set_global_opts(title_opts=opts.TitleOpts(title=title))
         .set_series_opts(label_opts=opts.LabelOpts(formatter="{b}"))
         )
         return c
-
-
+    elif chart_type == 'themeriver': # 主题河流图
+        c = (
+            ThemeRiver()
+            .add(
+                xlist,
+                datas,
+                singleaxis_opts=opts.SingleAxisOpts(type_=style.setdefault('type_',"time"), pos_bottom=style.setdefault('pos_bottom',"10%")),
+            )
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
+    elif chart_type == 'wordcloud': # 词云图
+        c = (
+            WordCloud()
+            .add("", datas, word_size_range=style.setdefault('word_size_range',[20, 100]))
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
 
 
 

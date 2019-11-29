@@ -3067,6 +3067,101 @@ insert  into `t_sunburst`(`id`,`tree`) values
 (10,'{\"name\": \"Nutty Cocoa\", \"children\": [{\"name\": \"Nutty\", \"children\": [{\"name\": \"Peanuts\", \"value\": 1, \"itemStyle\": {\"color\": \"#d4ad12\"}}, {\"name\": \"Hazelnut\", \"value\": 1, \"itemStyle\": {\"color\": \"#9d5433\"}}, {\"name\": \"Almond\", \"value\": 1, \"itemStyle\": {\"color\": \"#c89f83\"}}], \"itemStyle\": {\"color\": \"#c78869\"}}, {\"name\": \"Cocoa\", \"children\": [{\"name\": \"Chocolate\", \"value\": 1, \"itemStyle\": {\"color\": \"#692a19\"}}, {\"name\": \"Dark Chocolate\", \"value\": 1, \"itemStyle\": {\"color\": \"#470604\"}}], \"itemStyle\": {\"color\": \"#bb764c\"}}], \"itemStyle\": {\"color\": \"#a87b64\"}}'),
 (11,'{\"name\": \"Sweet\", \"children\": [{\"name\": \"Brown Sugar\", \"children\": [{\"name\": \"Molasses\", \"value\": 1, \"itemStyle\": {\"color\": \"#310d0f\"}}, {\"name\": \"Maple Syrup\", \"value\": 1, \"itemStyle\": {\"color\": \"#ae341f\"}}, {\"name\": \"Caramelized\", \"value\": 1, \"itemStyle\": {\"color\": \"#d78823\"}}, {\"name\": \"Honey\", \"value\": 1, \"itemStyle\": {\"color\": \"#da5c1f\"}}], \"itemStyle\": {\"color\": \"#d45a59\"}}, {\"name\": \"Vanilla\", \"value\": 1, \"itemStyle\": {\"color\": \"#f89a80\"}}, {\"name\": \"Vanillin\", \"value\": 1, \"itemStyle\": {\"color\": \"#f37674\"}}, {\"name\": \"Overall Sweet\", \"value\": 1, \"itemStyle\": {\"color\": \"#e75b68\"}}, {\"name\": \"Sweet Aromatics\", \"value\": 1, \"itemStyle\": {\"color\": \"#d0545f\"}}], \"itemStyle\": {\"color\": \"#e65832\"}}');
 
+/*Table structure for table `t_themeriver` */
+
+DROP TABLE IF EXISTS `t_themeriver`;
+
+CREATE TABLE `t_themeriver` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `count` int(5) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_themeriver` */
+
+insert  into `t_themeriver`(`id`,`name`,`date`,`count`) values 
+(1,'DQ','2015-11-08',10),
+(2,'DQ','2015-11-09',15),
+(3,'DQ','2015-11-10',35),
+(4,'DQ','2015-11-14',7),
+(5,'DQ','2015-11-15',2),
+(6,'DQ','2015-11-16',17),
+(7,'DQ','2015-11-17',33),
+(8,'DQ','2015-11-18',40),
+(9,'DQ','2015-11-19',32),
+(10,'DQ','2015-11-20',26),
+(11,'TY','2015-11-08',35),
+(12,'TY','2015-11-09',36),
+(13,'TY','2015-11-10',37),
+(14,'TY','2015-11-11',22),
+(15,'TY','2015-11-12',24),
+(16,'TY','2015-11-13',26),
+(17,'TY','2015-11-14',34),
+(18,'TY','2015-11-15',21),
+(19,'TY','2015-11-16',18),
+(20,'TY','2015-11-17',45),
+(21,'TY','2015-11-18',32),
+(22,'TY','2015-11-19',35),
+(23,'TY','2015-11-20',30),
+(24,'SS','2015-11-08',21),
+(25,'SS','2015-11-09',25),
+(26,'SS','2015-11-10',27),
+(27,'SS','2015-11-11',23),
+(28,'SS','2015-11-12',24),
+(29,'SS','2015-11-13',21),
+(30,'SS','2015-11-14',35),
+(31,'SS','2015-11-15',39),
+(32,'SS','2015-11-16',40),
+(33,'SS','2015-11-17',36),
+(34,'SS','2015-11-18',33),
+(35,'SS','2015-11-19',43),
+(36,'SS','2015-11-20',40),
+(37,'QG','2015-11-14',7),
+(38,'QG','2015-11-15',2),
+(39,'QG','2015-11-16',17),
+(40,'QG','2015-11-17',33),
+(41,'QG','2015-11-18',40),
+(42,'QG','2015-11-19',32),
+(43,'QG','2015-11-20',26),
+(44,'QG','2015-11-21',35),
+(45,'QG','2015-11-22',40),
+(46,'QG','2015-11-23',32),
+(47,'QG','2015-11-24',26),
+(48,'QG','2015-11-25',22),
+(49,'SY','2015-11-08',10),
+(50,'SY','2015-11-09',15),
+(51,'SY','2015-11-10',35),
+(52,'SY','2015-11-11',38),
+(53,'SY','2015-11-12',22),
+(54,'SY','2015-11-13',16),
+(55,'SY','2015-11-14',7),
+(56,'SY','2015-11-15',2),
+(57,'SY','2015-11-16',17),
+(58,'SY','2015-11-17',33),
+(59,'SY','2015-11-18',40),
+(60,'SY','2015-11-19',32),
+(61,'SY','2015-11-20',26),
+(62,'SY','2015-11-21',35),
+(63,'SY','2015-11-22',4),
+(64,'SY','2015-11-23',32),
+(65,'SY','2015-11-24',26),
+(66,'SY','2015-11-25',22),
+(67,'DD','2015-11-08',10),
+(68,'DD','2015-11-09',15),
+(69,'DD','2015-11-10',35),
+(70,'DD','2015-11-11',38),
+(71,'DD','2015-11-12',22),
+(72,'DD','2015-11-13',16),
+(73,'DD','2015-11-14',7),
+(74,'DD','2015-11-15',2),
+(75,'DD','2015-11-16',17),
+(76,'DD','2015-11-17',33),
+(77,'DD','2015-11-18',4),
+(78,'DD','2015-11-19',32),
+(79,'DD','2015-11-20',26);
+
 /*Table structure for table `t_weibo_categories` */
 
 DROP TABLE IF EXISTS `t_weibo_categories`;
@@ -6873,6 +6968,41 @@ insert  into `t_weibo_nodes`(`id`,`name`,`symbolsize`,`category`,`draggable`,`la
 (1108,'我的威海',5,'过去的老照片','False','',0),
 (1109,'吴足道-alaya',5,'新浪体育','False','',0),
 (1110,'喜欢YY的城墙鸡',5,'新浪体育','False','',0);
+
+/*Table structure for table `t_wordcloud` */
+
+DROP TABLE IF EXISTS `t_wordcloud`;
+
+CREATE TABLE `t_wordcloud` (
+  `id` int(5) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `count` int(5) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+
+/*Data for the table `t_wordcloud` */
+
+insert  into `t_wordcloud`(`id`,`name`,`count`) values 
+(1,'Sam S Club',10000),
+(2,'Macys',6181),
+(3,'Amy Schumer',4386),
+(4,'Jurassic World',4055),
+(5,'Charter Communications',2467),
+(6,'Chick Fil A',2244),
+(7,'Planet Fitness',1868),
+(8,'Pitch Perfect',1484),
+(9,'Express',1112),
+(10,'Home',865),
+(11,'Johnny Depp',847),
+(12,'Lena Dunham',582),
+(13,'Lewis Hamilton',555),
+(14,'KXAN',550),
+(15,'Mary Ellen Mark',462),
+(16,'Farrah Abraham',366),
+(17,'Rita Ora',360),
+(18,'Serena Williams',282),
+(19,'NCAA baseball tournament',273),
+(20,'Point Break',265);
 
 /* Procedure structure for procedure `ist_calendar` */
 
