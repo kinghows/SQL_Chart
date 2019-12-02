@@ -24,11 +24,16 @@ from pyecharts.charts import Sankey
 from pyecharts.charts import Sunburst
 from pyecharts.charts import ThemeRiver
 from pyecharts.charts import WordCloud
+from pyecharts.charts import Boxplot
+from pyecharts.charts import EffectScatter
+
+
 
 import os
 import json
 import math
 import random
+from pyecharts.faker import Faker
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -368,8 +373,25 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             .set_global_opts(title_opts=opts.TitleOpts(title=title))
         )
         return c
-
-
+    elif chart_type == 'boxpolt': # 箱形图
+        c = Boxplot()
+        c.add_xaxis(xlist)
+        for i in range(len(ylist)):
+            name = ylist[i]
+            vn=[]
+            for v in zdict[name]:
+                vn.append(list(map(int, v.split(","))))
+            c.add_yaxis(name, c.prepare_data(vn))
+        c.set_global_opts(title_opts=opts.TitleOpts(title=title))
+        return c
+    elif chart_type == 'effectscatter': # 涟漪特效散点图
+        c = (
+            EffectScatter()
+            .add_xaxis(xlist)
+            .add_yaxis("", datas)
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
 
 
 
