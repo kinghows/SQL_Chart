@@ -11,7 +11,11 @@ import sys
 import configparser
 from pyecharts import options as opts
 from pyecharts.globals import SymbolType
-from pyecharts.charts import Page,Pie,Bar,Line
+from pyecharts.globals import ChartType
+from pyecharts.charts import Page
+from pyecharts.charts import Pie
+from pyecharts.charts import Bar
+from pyecharts.charts import Line
 from pyecharts.charts import Calendar
 from pyecharts.charts import Funnel
 from pyecharts.charts import Gauge
@@ -26,8 +30,13 @@ from pyecharts.charts import ThemeRiver
 from pyecharts.charts import WordCloud
 from pyecharts.charts import Boxplot
 from pyecharts.charts import EffectScatter
-
-
+from pyecharts.charts import HeatMap
+from pyecharts.charts import Kline
+from pyecharts.charts import PictorialBar
+from pyecharts.charts import Scatter
+from pyecharts.charts import Tree
+from pyecharts.charts import TreeMap
+from pyecharts.charts import Geo
 
 import os
 import json
@@ -83,7 +92,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    if ylist[0] != '0' and chart_type != 'graph2' and chart_type != 'graph3':
+    if ylist[0] != '0' and chart_type != 'graph2' and chart_type != 'graph3'  and chart_type != 'pictorialbar':
         zdict={}
         for i in range(len(ylist)):
             zdict[ylist[i]]=[]
@@ -94,14 +103,22 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
 
     if chart_type == 'line':    # 折线图
         c = Line()
-        c.set_global_opts(title_opts={"text": title})#{"text": "主标题", "subtext": "副标题"}
+        c.set_global_opts(title_opts=opts.TitleOpts(title=title),
+                xaxis_opts=opts.AxisOpts(
+                axistick_opts=opts.AxisTickOpts(is_align_with_label=True),
+                is_scale=False,
+                boundary_gap=False,
+                ),
+            )
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
             c.add_yaxis(name, zdict[name],
                 markpoint_opts=opts.MarkPointOpts(data=[opts.MarkPointItem(type_=style.setdefault('type_',"max"))]),
-                                            is_smooth=style.setdefault('is_smooth',True),
-                                            label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False))) 
+                is_smooth=style.setdefault('is_smooth',True),
+                label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)),
+                areastyle_opts=opts.AreaStyleOpts(opacity=style.setdefault('opacity',0))
+                ) 
         return c
     elif chart_type == 'pie':# 饼图
         c = Pie()
@@ -392,9 +409,169 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             .set_global_opts(title_opts=opts.TitleOpts(title=title))
         )
         return c
+    elif chart_type == 'heatmap': # 热力图
+        c = (
+            HeatMap()
+            .add_xaxis(xlist)
+            .add_yaxis("series0",ylist , datas)
+            .set_global_opts(
+            title_opts=opts.TitleOpts(title=title),
+            visualmap_opts=opts.VisualMapOpts(),
+            )
+        )
+        return c
+    elif chart_type == 'kline': # K线图
+        c = (
+            Kline()
+            .add_xaxis(xlist)
+            .add_yaxis("kline", datas,itemstyle_opts=opts.ItemStyleOpts(
+                color="#ec0000",
+                color0="#00da3c",
+                border_color="#8A0000",
+                border_color0="#008F28",
+                ),
+                markline_opts=opts.MarkLineOpts(
+                data=[opts.MarkLineItem(type_="max", value_dim="close")]
+                ),
+            )
+            .set_global_opts(
+                yaxis_opts=opts.AxisOpts(is_scale=True),
+                xaxis_opts=opts.AxisOpts(is_scale=True),
+                datazoom_opts=[opts.DataZoomOpts(type_="inside")],
+                title_opts=opts.TitleOpts(title=title),
+        )
+        )
+        return c
+    elif chart_type == 'pictorialbar': # 象形柱状图
+        ys = f_get_query_record(conn, y,database_type)
+        symbols = {}
+        for row in ys:
+            symbols[row[0]]=row[1]
 
+        c = PictorialBar()
+        c.add_xaxis(xlist)
+        v =[]
+        name =''
+        i=5
+        for row in datas:
+            if row[0]!=name:
+                if len(v)>0:
+                    c.add_yaxis(name, 
+                          v,
+                          label_opts=opts.LabelOpts(is_show=False),
+                          symbol_size=22,
+                          symbol_repeat="fixed",
+                          symbol_offset=[0, i],
+                          is_symbol_clip=True)
+                    v =[]
+                    i=i-20
+                name = row[0]
+            v.append({"value": row[2], "symbol": symbols[row[1]]})
+        c.add_yaxis(name, 
+                          v,
+                          label_opts=opts.LabelOpts(is_show=False),
+                          symbol_size=22,
+                          symbol_repeat="fixed",
+                          symbol_offset=[0, i],
+                          is_symbol_clip=True)
+        c.reversal_axis()
+        c.set_global_opts(
+            title_opts=opts.TitleOpts(title=title),
+            xaxis_opts=opts.AxisOpts(is_show=True),
+            yaxis_opts=opts.AxisOpts(
+                axistick_opts=opts.AxisTickOpts(is_show=False),
+                axisline_opts=opts.AxisLineOpts(linestyle_opts=opts.LineStyleOpts(opacity=0))
+                )    
+            )
+        return c
+    elif chart_type == 'scatter': # 散点图
+        c = Scatter()
+        c.add_xaxis(xlist)
+        v =[]
+        name =''
+        for row in datas:
+            if row[0]!=name:
+                if len(v)>0:
+                    c.add_yaxis(name, v)
+                    v =[]
+                name = row[0]
+            v.append(row[2])
+        c.add_yaxis(name, v)
+        c.set_global_opts(title_opts=opts.TitleOpts(title=title),
+                          visualmap_opts=opts.VisualMapOpts(type_="size", max_=150, min_=20)
+                         )
+        return c
+    elif chart_type == 'overlap': # 层叠多图
+        v1 = []
+        v2 = []
+        v3 = []
+        for row in datas:
+            v1.append(row[0])
+            v2.append(row[1])
+            v3.append(row[2])
+        c = (
+            Bar()
+            .add_xaxis(Faker.months)
+            .add_yaxis("蒸发量", v1)
+            .add_yaxis("降水量", v2)
+            .extend_axis(
+                yaxis=opts.AxisOpts(
+                    axislabel_opts=opts.LabelOpts(formatter="{value} °C"), interval=5
+                )
+            )
+            .set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=title),
+                yaxis_opts=opts.AxisOpts(
+                    axislabel_opts=opts.LabelOpts(formatter="{value} ml")
+                ),
+            )
+        )
 
-
+        line = Line().add_xaxis(Faker.months).add_yaxis("平均温度", v3, yaxis_index=1)
+        c.overlap(line)
+        return c
+    elif chart_type == 'tree': # 树图
+        j = []
+        for row in datas:
+            j.append(eval(row[0]))
+        c = (
+            Tree()
+            .add("", j, collapse_interval=2, orient=style.setdefault('orient',"LR"),label_opts=opts.LabelOpts(
+                position=style.setdefault('position',None),
+                horizontal_align=style.setdefault('horizontal_align',None),
+                vertical_align=style.setdefault('vertical_align',None),
+                rotate=style.setdefault('rotate',None)
+                )
+            )
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
+    elif chart_type == 'treemap': # 矩形树图
+        j = []
+        for row in datas:
+            j.append(eval(row[0]))
+        c = (
+            TreeMap()
+            .add(xlist[0], j[0])
+            .set_global_opts(title_opts=opts.TitleOpts(title=title))
+        )
+        return c
+    elif chart_type == 'geo': # 地理坐标系
+        c = Geo()
+        c.add_schema(maptype=xlist[0])
+        if style.setdefault('ChartType','None')=='None':
+            c.add(xlist[0],datas)
+        elif style.setdefault('ChartType','None')=='HEATMAP': 
+            c.add(xlist[0],datas,type_=ChartType.HEATMAP)  
+        elif style.setdefault('ChartType','None')=='EFFECT_SCATTER': 
+            c.add(xlist[0],datas,type_=ChartType.EFFECT_SCATTER)
+        c.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        c.set_global_opts(
+                visualmap_opts=opts.VisualMapOpts(is_piecewise=style.setdefault('is_piecewise',None)),
+                title_opts=opts.TitleOpts(title=title),
+            )
+        return c
 
 
 
