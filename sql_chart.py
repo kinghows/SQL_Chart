@@ -37,12 +37,12 @@ from pyecharts.charts import Scatter
 from pyecharts.charts import Tree
 from pyecharts.charts import TreeMap
 from pyecharts.charts import Geo
-
-import os
-import json
-import math
-import random
-from pyecharts.faker import Faker
+from pyecharts.charts import Map
+from pyecharts.charts import Bar3D
+from pyecharts.charts import Line3D
+from pyecharts.charts import Scatter3D
+from pyecharts.charts import Surface3D
+from pyecharts.charts import MapGlobe
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -92,7 +92,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    if ylist[0] != '0' and chart_type != 'graph2' and chart_type != 'graph3'  and chart_type != 'pictorialbar':
+    if ylist[0] != '0' and chart_type != 'graph2' and chart_type != 'graph3'  and chart_type != 'pictorialbar' and chart_type != 'geo_lines' and chart_type != 'bar3d' and chart_type != 'bar3d_stack' and chart_type != 'line3d':
         zdict={}
         for i in range(len(ylist)):
             zdict[ylist[i]]=[]
@@ -511,7 +511,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             v3.append(row[2])
         c = (
             Bar()
-            .add_xaxis(Faker.months)
+            .add_xaxis(xlist)
             .add_yaxis("蒸发量", v1)
             .add_yaxis("降水量", v2)
             .extend_axis(
@@ -528,7 +528,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             )
         )
 
-        line = Line().add_xaxis(Faker.months).add_yaxis("平均温度", v3, yaxis_index=1)
+        line = Line().add_xaxis(xlist).add_yaxis("平均温度", v3, yaxis_index=1)
         c.overlap(line)
         return c
     elif chart_type == 'tree': # 树图
@@ -572,8 +572,140 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 title_opts=opts.TitleOpts(title=title),
             )
         return c
-
-
+    elif chart_type == 'geo_lines': # 地理坐标系3
+        ys = f_get_query_record(conn, y,database_type)
+        c = Geo()
+        c.add_schema(maptype=xlist[0],
+            itemstyle_opts=opts.ItemStyleOpts(color=style.setdefault('back_color',"#323c48"), border_color=style.setdefault('border_color',"#111")))
+        c.add(xlist[0],datas,type_=ChartType.EFFECT_SCATTER,color=style.setdefault('dot_color',"red"))
+        c.add(
+            xlist[0],
+            ys,
+            type_=ChartType.LINES,
+            effect_opts=opts.EffectOpts(
+                symbol=SymbolType.ARROW, symbol_size=style.setdefault('symbol_size',6), color=style.setdefault('line_color',"blue")
+            ),
+            linestyle_opts=opts.LineStyleOpts(curve=style.setdefault('curve',0.2)),
+        )
+        c.set_series_opts(label_opts=opts.LabelOpts(is_show=False))
+        c.set_global_opts(title_opts=opts.TitleOpts(title=title))
+        return c
+    elif chart_type == 'map': # 地图
+        c = Map()
+        c.add(xlist[1],datas, xlist[0])
+        c.set_series_opts(label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
+        if style.setdefault('max_',0) ==0 :
+            c.set_global_opts(title_opts=opts.TitleOpts(title=title))
+        else:
+            c.set_global_opts(title_opts=opts.TitleOpts(title=title),
+                visualmap_opts=opts.VisualMapOpts(max_=style.setdefault('max_',200),is_piecewise=style.setdefault('is_piecewise',True)))
+        return c
+    elif chart_type == 'bar3d': # 3D柱状图
+        c = (
+        Bar3D()
+        .add(
+            "",
+            [[d[1], d[0], d[2]] for d in datas],
+            xaxis3d_opts=opts.Axis3DOpts(xlist, type_="category"),
+            yaxis3d_opts=opts.Axis3DOpts(ylist, type_="category"),
+            zaxis3d_opts=opts.Axis3DOpts(type_="value"),
+        )
+        .set_global_opts(
+            visualmap_opts=opts.VisualMapOpts(max_=style.setdefault('max_',80)),
+            title_opts=opts.TitleOpts(title=title),
+        )
+        )
+        return c
+    elif chart_type == 'bar3d_stack': # 堆叠柱状图
+        c = Bar3D()
+        for _ in range(7):
+            c.add(
+                "",
+                datas,
+                shading="lambert",
+                xaxis3d_opts=opts.Axis3DOpts(data=xlist, type_="value"),
+                yaxis3d_opts=opts.Axis3DOpts(data=ylist, type_="value"),
+                zaxis3d_opts=opts.Axis3DOpts(type_="value"),
+            )
+        c.set_global_opts(title_opts=opts.TitleOpts(title))
+        c.set_series_opts(**{"stack": "stack"})
+        return c
+    elif chart_type == 'line3d': # 3D折线图
+        c = (
+            Line3D()
+            .add(
+                "",
+                datas,
+                xaxis3d_opts=opts.Axis3DOpts(xlist, type_="value"),
+                yaxis3d_opts=opts.Axis3DOpts(ylist, type_="value"),
+                grid3d_opts=opts.Grid3DOpts(width=style.setdefault('width',100), 
+                                            height=style.setdefault('height',100), 
+                                            depth=style.setdefault('depth',100),
+                                            is_rotate=style.setdefault('is_rotate',False)),
+            )
+            .set_global_opts(
+                visualmap_opts=opts.VisualMapOpts(
+                    max_=style.setdefault('max_',30), min_=style.setdefault('min_',0), range_color=style.setdefault('range_color',[]).split(',')
+                ),
+                title_opts=opts.TitleOpts(title=title),
+            )
+        )
+        return c
+    elif chart_type == 'scatter3d': # 3D散点图
+        c = (
+            Scatter3D()
+            .add(xlist[0], datas)
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title),
+                visualmap_opts=opts.VisualMapOpts(range_color=style.setdefault('range_color',[]).split(',')),
+        )
+        )
+        return c
+    elif chart_type == 'surface3d': # 3D曲面图
+        c = (
+            Surface3D()
+            .add(
+                xlist[0],
+                datas,
+                xaxis3d_opts=opts.Axis3DOpts(type_="value"),
+                yaxis3d_opts=opts.Axis3DOpts(type_="value"),
+                grid3d_opts=opts.Grid3DOpts(width=style.setdefault('width',100), 
+                                            height=style.setdefault('height',100), 
+                                            depth=style.setdefault('depth',100)
+                ),
+            )
+            .set_global_opts(
+                title_opts=opts.TitleOpts(title=title),
+                visualmap_opts=opts.VisualMapOpts(
+                   max_=style.setdefault('max_',3), min_=style.setdefault('min_',-3), range_color=style.setdefault('range_color',[]).split(',')
+                ),
+            )
+        )
+        return c
+    elif chart_type == 'mapglobe': # 地球地图
+        high = max([x for _, x in datas])
+        low = min([x for _, x in datas])
+        c = (
+            MapGlobe()
+            .add_schema()
+            .add(
+                maptype=style.setdefault('maptype',"world"),
+                series_name=xlist[0],
+                data_pair=datas,
+                is_map_symbol_show=style.setdefault('is_map_symbol_show',False),
+                label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)),
+            )
+            .set_global_opts(
+                visualmap_opts=opts.VisualMapOpts(
+                min_=low,
+                max_=high,
+                range_text=["max", "min"],
+                is_calculable=style.setdefault('is_calculable',True),
+                range_color=style.setdefault('range_color',["lightskyblue", "yellow", "orangered"]).split(','),
+            )
+            )
+        )
+        return c
 
 
 if __name__=="__main__":
