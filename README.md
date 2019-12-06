@@ -13,11 +13,17 @@ chart used pyecharts 1.6+
 
 pip install pyecharts
 
-### chart_demo.html: more than 40 chart effects demonstration.
+### chart_demo.html: 
 
-### dbset.ini: database connect info & SQL info.
+more than 40 chart effects demonstration.
 
-### chart_demo.sql: demo database backup file.
+### dbset.ini: 
+
+database connect info & SQL info.
+
+### chart_demo.sql: 
+
+demo database backup file.
 
 ### execute:
 
