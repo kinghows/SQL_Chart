@@ -13,43 +13,17 @@ chart used pyecharts 1.6+
 
 pip install pyecharts
 
-Edit connect info in dbset.ini [database] part.
+##chart_demo.html: more than 40 chart effects demonstration.
 
-Edit you SQL info in dbset.ini [[chart]] part.
+##dbset.ini: database connect info & SQL info.
 
-demo:
+##chart_demo.sql: demo database backup file.
 
-you can import chart_demo.sql to mysql,then python sql_chart.py -p dbset.ini -s html
-
-or just look at the results: chart_demo.html
-
-dbset example:
-
-chart_title = chart_demo
-
-all_in_one_page = 1
-
-chart_count = n
-
-#---m---------------------------------
-
-titlem = ***
-
-chart_typem = ***
-
-xm =select x from table
-
-ym =select y from table
-
-datam =select x,y,data from table
-
-n must <=m
-
-execute:
+##execute:
 
 python sql_chart.py -p dbset.ini -s html
 
-send email:
+##send email:
 
 python SendEmail.py -p emailset.ini -f my_chart1.html,my_chart2.html
 
