@@ -693,28 +693,64 @@ DROP TABLE IF EXISTS `t_geo`;
 
 CREATE TABLE `t_geo` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
+  `year` int(4) DEFAULT NULL,
   `country` varchar(20) DEFAULT NULL,
   `province` varchar(20) DEFAULT NULL,
   `city` varchar(20) DEFAULT NULL,
   `counts` int(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `t_geo` */
 
-insert  into `t_geo`(`id`,`country`,`province`,`city`,`counts`) values 
-(1,'china','广东',NULL,75),
-(2,'china','北京',NULL,111),
-(3,'china','上海',NULL,131),
-(4,'china','江西',NULL,93),
-(5,'china','湖南',NULL,118),
-(6,'china','浙江',NULL,65),
-(7,'china','江苏',NULL,133),
-(8,NULL,'广东','阳江市',88),
-(9,NULL,'广东','肇庆市',99),
-(10,NULL,'广东','汕头市',66),
-(11,NULL,'广东','汕尾市',55),
-(12,NULL,'广东','揭阳市',77);
+insert  into `t_geo`(`id`,`year`,`country`,`province`,`city`,`counts`) values 
+(1,2015,'china','广东',NULL,75),
+(2,2015,'china','北京',NULL,111),
+(3,2015,'china','上海',NULL,131),
+(4,2015,'china','江西',NULL,93),
+(5,2015,'china','湖南',NULL,118),
+(6,2015,'china','浙江',NULL,65),
+(7,2015,'china','江苏',NULL,133),
+(8,2015,NULL,'广东','阳江市',88),
+(9,2015,NULL,'广东','肇庆市',99),
+(10,2015,NULL,'广东','汕头市',66),
+(11,2015,NULL,'广东','汕尾市',55),
+(12,2015,NULL,'广东','揭阳市',77),
+(13,2016,'china','广东',NULL,90),
+(14,2016,'china','北京',NULL,133),
+(15,2016,'china','上海',NULL,157),
+(16,2016,'china','江西',NULL,112),
+(17,2016,'china','湖南',NULL,142),
+(18,2016,'china','浙江',NULL,78),
+(19,2016,'china','江苏',NULL,160),
+(20,2017,'china','广东',NULL,113),
+(21,2017,'china','北京',NULL,167),
+(22,2017,'china','上海',NULL,197),
+(23,2017,'china','江西',NULL,140),
+(24,2017,'china','湖南',NULL,177),
+(25,2017,'china','浙江',NULL,98),
+(26,2017,'china','江苏',NULL,200),
+(27,2018,'china','广东',NULL,128),
+(28,2018,'china','北京',NULL,189),
+(29,2018,'china','上海',NULL,223),
+(30,2018,'china','江西',NULL,158),
+(31,2018,'china','湖南',NULL,201),
+(32,2018,'china','浙江',NULL,111),
+(33,2018,'china','江苏',NULL,226),
+(34,2019,'china','广东',NULL,143),
+(35,2019,'china','北京',NULL,211),
+(36,2019,'china','上海',NULL,249),
+(37,2019,'china','江西',NULL,177),
+(38,2019,'china','湖南',NULL,224),
+(39,2019,'china','浙江',NULL,124),
+(40,2019,'china','江苏',NULL,253),
+(41,2020,'china','广东',NULL,165),
+(42,2020,'china','北京',NULL,244),
+(43,2020,'china','上海',NULL,288),
+(44,2020,'china','江西',NULL,205),
+(45,2020,'china','湖南',NULL,260),
+(46,2020,'china','浙江',NULL,143),
+(47,2020,'china','江苏',NULL,293);
 
 /*Table structure for table `t_geoline` */
 
