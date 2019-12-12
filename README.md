@@ -15,7 +15,7 @@ pip install pyecharts
 
 ### chart_demo.html: 
 
-more than 40 chart effects demonstration.
+chart effects demonstration.
 
 ### dbset.ini: 
 
