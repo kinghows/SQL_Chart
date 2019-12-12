@@ -47,6 +47,8 @@ from pyecharts.charts import Grid
 from pyecharts.charts import Tab
 from pyecharts.charts import Timeline
 from pyecharts.components import Table
+from pyecharts.components import Image
+from pyecharts.options import ComponentTitleOpts
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -973,6 +975,11 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                     visualmap_opts=opts.VisualMapOpts(max_=style.setdefault('max_',200),is_piecewise=style.setdefault('is_piecewise',True))
                     )
             c.add(b, "{}".format(i))
+        return c
+    elif chart_type == 'image': # 图像
+        c = Image()
+        c.add(src=xlist[0],style_opts=style)
+        c.set_global_opts(title_opts=ComponentTitleOpts(title=title))
         return c
 
 if __name__=="__main__":
