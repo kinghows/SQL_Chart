@@ -10,6 +10,7 @@ import getopt
 import sys
 import configparser
 from pyecharts import options as opts
+from pyecharts.globals import ThemeType
 from pyecharts.globals import SymbolType
 from pyecharts.globals import ChartType
 from pyecharts.charts import Page
@@ -49,6 +50,7 @@ from pyecharts.charts import Timeline
 from pyecharts.components import Table
 from pyecharts.components import Image
 from pyecharts.options import ComponentTitleOpts
+from pyecharts.render import make_snapshot
 
 def f_get_conn(dbinfo,database_type):
     if database_type == "MySQL":
@@ -93,7 +95,7 @@ def f_get_query_list(conn, query,database_type):
             strlist.append(str(col)) #windows
     return strlist
 
-def chart(conn,database_type,chart_type,title,x,y,data,style):
+def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
     xlist = f_get_query_list(conn, x, database_type)
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
@@ -108,7 +110,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             zdict[row[1]].append(str(row[2])) #windows
 
     if chart_type == 'line':    # 折线图
-        c = Line()
+        c = Line(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -131,7 +133,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 ) 
         return c
     elif chart_type == 'pie':# 饼图
-        c = Pie()
+        c = Pie(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -145,7 +147,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
         return c
     elif chart_type == 'bar': # 柱形图
-        c = Bar()
+        c = Bar(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -158,7 +160,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             c.add_yaxis(name, zdict[name]) 
         return c
     elif chart_type == 'calendar': # 日历图
-        c = Calendar()
+        c = Calendar(themetype)
         c.add("", datas, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
         c.set_global_opts(
             title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
@@ -176,7 +178,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         )
         return c
     elif chart_type == 'funnel': # 漏斗图
-        c = Funnel()
+        c = Funnel(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -186,7 +188,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position=style.setdefault('position',"inside")))
         return c
     elif chart_type == 'gauge': # 仪表盘
-        c = Gauge()
+        c = Gauge(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -200,7 +202,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             ))
         return c
     elif chart_type == 'graph': # 关系图
-        c = Graph()
+        c = Graph(themetype)
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
         for row in xs:
@@ -230,7 +232,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         links = []
         for row in datas:
             links.append({"source": row[0], "target": row[1]})
-        c = Graph()
+        c = Graph(themetype)
         c.add(
                 "",
                 nodes,
@@ -320,7 +322,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             )
         return c
     elif chart_type == 'liquid': # 水球图
-        c = Liquid()
+        c = Liquid(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -336,7 +338,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             strdata = row[3]
             datalist = strdata.split(",")
             schemas.append({"dim": row[0], "name": row[1], "type_": row[2], "data": datalist})
-        c = Parallel()
+        c = Parallel(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -347,7 +349,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.add("parallel", datas)
         return c
     elif chart_type == 'polar': # 极坐标系
-        c = Polar()
+        c = Polar(themetype)
         c.add("", datas, type_=style.setdefault('type_',"scatter"), label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -361,7 +363,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         schemas = []
         for row in xs:
             schemas.append({"name": row[0], "max_": row[1], "min_": row[2]})
-        c = Radar()
+        c = Radar(themetype)
         c.add_schema(schemas)
         v =[]
         name =''
@@ -391,7 +393,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         links = []
         for row in datas:
             links.append({"source": row[0], "target": row[1], "value": row[2]})
-        c = Sankey()
+        c = Sankey(themetype)
         c.add(
                 "sankey",
                 nodes=nodes,
@@ -443,7 +445,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}"))
         return c
     elif chart_type == 'themeriver': # 主题河流图
-        c = ThemeRiver()
+        c = ThemeRiver(themetype)
         c.add(
                 xlist,
                 datas,
@@ -457,7 +459,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'wordcloud': # 词云图
-        c = WordCloud()
+        c = WordCloud(themetype)
         c.add("", datas, word_size_range=style.setdefault('word_size_range',[20, 100]))
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -467,7 +469,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'boxpolt': # 箱形图
-        c = Boxplot()
+        c = Boxplot(themetype)
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
@@ -483,7 +485,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'effectscatter': # 涟漪特效散点图
-        c = EffectScatter()
+        c = EffectScatter(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("", datas)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
@@ -494,7 +496,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'heatmap': # 热力图
-        c = HeatMap()
+        c = HeatMap(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("series0",ylist , datas)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
@@ -506,7 +508,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'kline': # K线图
-        c = Kline()
+        c = Kline(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("kline", datas,itemstyle_opts=opts.ItemStyleOpts(
                 color=style.setdefault('color',"#ec0000"),
@@ -534,7 +536,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         for row in ys:
             symbols[row[0]]=row[1]
 
-        c = PictorialBar()
+        c = PictorialBar(themetype)
         c.add_xaxis(xlist)
         v =[]
         name =''
@@ -574,7 +576,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'scatter': # 散点图
-        c = Scatter()
+        c = Scatter(themetype)
         c.add_xaxis(xlist)
         v =[]
         name =''
@@ -602,7 +604,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             v1.append(row[0])
             v2.append(row[1])
             v3.append(row[2])
-        c = Bar()
+        c = Bar(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("蒸发量", v1)
         c.add_yaxis("降水量", v2)
@@ -621,14 +623,14 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                     axislabel_opts=opts.LabelOpts(formatter="{value} ml")
                 ),
             )
-        line = Line().add_xaxis(xlist).add_yaxis("平均温度", v3, yaxis_index=1)
+        line = Line(themetype).add_xaxis(xlist).add_yaxis("平均温度", v3, yaxis_index=1)
         c.overlap(line)
         return c
     elif chart_type == 'tree': # 树图
         j = []
         for row in datas:
             j.append(eval(row[0]))
-        c = Tree()
+        c = Tree(themetype)
         c.add("", j, collapse_interval=2, orient=style.setdefault('orient',"LR"),label_opts=opts.LabelOpts(
                 position=style.setdefault('position',None),
                 horizontal_align=style.setdefault('horizontal_align',None),
@@ -647,7 +649,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         j = []
         for row in datas:
             j.append(eval(row[0]))
-        c = TreeMap()
+        c = TreeMap(themetype)
         c.add(xlist[0], j[0])
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -657,7 +659,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'geo': # 地理坐标系
-        c = Geo()
+        c = Geo(themetype)
         c.add_schema(maptype=xlist[0])
         if style.setdefault('ChartType','None')=='None':
             c.add(xlist[0],datas)
@@ -676,7 +678,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         return c
     elif chart_type == 'geo_lines': # 地理坐标系3
         ys = f_get_query_record(conn, y,database_type)
-        c = Geo()
+        c = Geo(themetype)
         c.add_schema(maptype=xlist[0],
             itemstyle_opts=opts.ItemStyleOpts(color=style.setdefault('back_color',"#323c48"), border_color=style.setdefault('border_color',"#111")))
         c.add(xlist[0],datas,type_=ChartType.EFFECT_SCATTER,color=style.setdefault('dot_color',"red"))
@@ -699,7 +701,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'map': # 地图
-        c = Map()
+        c = Map(themetype)
         c.add(xlist[1],datas, xlist[0])
         c.set_series_opts(label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
         if style.setdefault('max_',0) ==0 :
@@ -721,7 +723,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'bar3d': # 3D柱状图
-        c =  Bar3D()
+        c =  Bar3D(themetype)
         c.add(
             "",
             [[d[1], d[0], d[2]] for d in datas],
@@ -739,7 +741,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'bar3d_stack': # 堆叠柱状图
-        c = Bar3D()
+        c = Bar3D(themetype)
         for _ in range(7):
             c.add(
                 "",
@@ -760,7 +762,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.set_series_opts(**{"stack": "stack"})
         return c
     elif chart_type == 'line3d': # 3D折线图
-        c = Line3D()
+        c = Line3D(themetype)
         c.add(
                 "",
                 datas,
@@ -783,7 +785,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'scatter3d': # 3D散点图
-        c = Scatter3D()
+        c = Scatter3D(themetype)
         c.add(xlist[0], datas)
         c.set_global_opts(
                 visualmap_opts=opts.VisualMapOpts(range_color=style.setdefault('range_color',[]).split(',')),
@@ -795,7 +797,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 )
         return c
     elif chart_type == 'surface3d': # 3D曲面图
-        c = Surface3D()
+        c = Surface3D(themetype)
         c.add(
                 xlist[0],
                 datas,
@@ -820,7 +822,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     elif chart_type == 'mapglobe': # 地球地图
         high = max([x for _, x in datas])
         low = min([x for _, x in datas])
-        c = MapGlobe()
+        c = MapGlobe(themetype)
         c.add_schema()
         c.add(
                 maptype=style.setdefault('maptype',"world"),
@@ -856,7 +858,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
                 result.append(abs(float("%.3f" % (sum_total / day_count))))
             return result
 
-        kline = Kline()
+        kline = Kline(themetype)
         kline.add_xaxis(xaxis_data=xlist)
         kline.add_yaxis(series_name="Dow-Jones index",y_axis=datas,itemstyle_opts=opts.ItemStyleOpts(color=style.setdefault('color',"#ec0000"), color0=style.setdefault('color0',"#00da3c")))
         kline.set_global_opts(title_opts=opts.TitleOpts(title=title,subtitle="MA(5,10,30,60)",),
@@ -873,7 +875,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             brush_opts=opts.BrushOpts(x_axis_index="all",brush_link="all",out_of_brush={"colorAlpha": 0.1},brush_type="lineX")
         )
 
-        line = Line()
+        line = Line(themetype)
         line.add_xaxis(xaxis_data=xlist)
         line.add_yaxis(series_name="MA5",y_axis=calculate_ma(day_count=5, d=datas),is_smooth=True,is_hover_animation=False,
             linestyle_opts=opts.LineStyleOpts(width=3, opacity=0.5),label_opts=opts.LabelOpts(is_show=False))
@@ -885,7 +887,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             linestyle_opts=opts.LineStyleOpts(width=3, opacity=0.5),label_opts=opts.LabelOpts(is_show=False))
         line.set_global_opts(xaxis_opts=opts.AxisOpts(type_="category"))
 
-        bar = Bar()
+        bar = Bar(themetype)
         bar.add_xaxis(xaxis_data=xlist)
         bar.add_yaxis(series_name="Volume",yaxis_data=[[i, datas[i][3], 1 if datas[i][0] > datas[i][1] else -1] for i in range(len(datas))],
             xaxis_index=1,yaxis_index=1,label_opts=opts.LabelOpts(is_show=False))
@@ -909,14 +911,14 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
         c.add(bar,grid_opts=opts.GridOpts(pos_left="10%", pos_right="8%", pos_top="70%", height="16%"))
         return c
     elif chart_type == 'table': # 表格
-        c = Table()
+        c = Table(themetype)
         c.add(xlist, datas)
         c.set_global_opts(title_opts=opts.ComponentTitleOpts(title=title))
         return c
     elif chart_type == 'timeline_bar': # 时间线轮播柱状图
         c = Timeline()
         for i in ylist:
-            b = Bar()
+            b = Bar(themetype)
             b.add_xaxis(xlist)
             b.add_yaxis(i, zdict[i]) 
             b.set_global_opts(title_opts=opts.TitleOpts("{}".format(i),pos_top=style.setdefault('title_pos_top',None),
@@ -930,7 +932,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
     elif chart_type == 'timeline_pie': # 时间线轮播饼图
         c = Timeline()
         for i in ylist:
-            b = Pie()
+            b = Pie(themetype)
             data_pair = list(zip(xlist,zdict[i]))
             b.add(series_name=i,data_pair=data_pair)
             b.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
@@ -954,7 +956,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             zdict[i].append(row)
         c = Timeline()
         for i in ylist:
-            b = Map()
+            b = Map(themetype)
             b.add(xlist[1],zdict[i], xlist[0])
             b.set_series_opts(label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
             if style.setdefault('max_',0) ==0 :
@@ -977,7 +979,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style):
             c.add(b, "{}".format(i))
         return c
     elif chart_type == 'image': # 图像
-        c = Image()
+        c = Image(themetype)
         c.add(src=xlist[0],style_opts=style)
         c.set_global_opts(title_opts=ComponentTitleOpts(title=title))
         return c
@@ -1043,13 +1045,46 @@ if __name__=="__main__":
                 data = config.get ( "chart", "data"+str(n))
                 strstyle = config.get ( "chart", "style"+str(n))
                 style = eval(strstyle)
+
+                style_themetype=style.setdefault('themetype','WHITE')
+                if style_themetype=='WHITE':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WHITE)
+                elif style_themetype=='LIGHT':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.LIGHT)
+                elif style_themetype=='DARK':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.DARK)
+                elif style_themetype=='CHALK':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.CHALK)
+                elif style_themetype=='ESSOS':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ESSOS)
+                elif style_themetype=='INFOGRAPHIC':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.INFOGRAPHIC)
+                elif style_themetype=='MACARONS':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.MACARONS)
+                elif style_themetype=='PURPLE_PASSION':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.PURPLE_PASSION)
+                elif style_themetype=='ROMA':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ROMA)
+                elif style_themetype=='ROMANTIC':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ROMANTIC)
+                elif style_themetype=='SHINE':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.SHINE)
+                elif style_themetype=='VINTAGE':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.VINTAGE)
+                elif style_themetype=='WALDEN':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WALDEN)
+                elif style_themetype=='WESTEROS':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WESTEROS)
+                elif style_themetype=='WONDERLAND':
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WONDERLAND)
+
                 if all_in_one_page =='ON':
                     if mutli_chart_type=='page':
-                        page.add(chart(conn,database_type,chart_type,title,x,y,data,style))
+                        page.add(chart(conn,database_type,chart_type,title,x,y,data,style,themetype))
                     else:
-                        page.add(chart(conn,database_type,chart_type,title,x,y,data,style),title)
+                        page.add(chart(conn,database_type,chart_type,title,x,y,data,style,themetype),title)
                 else:
-                    chart(conn,database_type,chart_type,title,x,y,data,style).render(path=title + '.' + save_as)
+                    chart(conn,database_type,chart_type,title,x,y,data,style,themetype).render(path=title + '.' + save_as)
             else:
                 grid = Grid()
                 chart_count_grid = int(config.get("chart", "chart_count"+str(n)))
@@ -1064,7 +1099,8 @@ if __name__=="__main__":
                     data = config.get ( "chart", "data"+str(n)+'_'+str(m))
                     strstyle = config.get ( "chart", "style"+str(n)+'_'+str(m))
                     style = eval(strstyle)
-                    c = chart(conn,database_type,chart_type,title,x,y,data,style)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WHITE)
+                    c = chart(conn,database_type,chart_type,title,x,y,data,style,themetype)
                     if grid_chart_type == 'grid_vertical':
                         if m==1:
                             grid.add(c, grid_opts=opts.GridOpts(pos_bottom=style.setdefault('grid_pos_bottom',"60%")))
