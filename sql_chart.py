@@ -264,7 +264,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         links = []
         for row in datas:
             links.append({"id": row[0], "source": row[1], "target": row[2]})
-        c = Graph(init_opts=opts.InitOpts(width="1000px", height="600px"))
+        c = Graph(themetype)
         c.add(
                 "",
                 nodes=nodes,
@@ -303,7 +303,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         #file=open('a.txt','w')  
         #file.writelines([str(line)+"\n" for line in nodes]);  
         #file.close() 
-        c = Graph(init_opts=opts.InitOpts(width="1000px", height="600px"))
+        c = Graph(themetype)
         c.add(
                 "",
                 nodes=nodes,
@@ -412,7 +412,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         j = []
         for row in datas:
             j.append(eval(row[0]))
-        c = Sunburst(init_opts=opts.InitOpts(width="1000px", height="600px"))
+        c = Sunburst(themetype)
         c.add(
             "",
             data_pair=j,
@@ -1045,38 +1045,38 @@ if __name__=="__main__":
                 data = config.get ( "chart", "data"+str(n))
                 strstyle = config.get ( "chart", "style"+str(n))
                 style = eval(strstyle)
-
+                        
                 style_themetype=style.setdefault('themetype','WHITE')
                 if style_themetype=='WHITE':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WHITE)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WHITE,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='LIGHT':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.LIGHT)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.LIGHT,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='DARK':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.DARK)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.DARK,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='CHALK':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.CHALK)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.CHALK,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='ESSOS':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ESSOS)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ESSOS,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='INFOGRAPHIC':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.INFOGRAPHIC)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.INFOGRAPHIC,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='MACARONS':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.MACARONS)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.MACARONS,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='PURPLE_PASSION':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.PURPLE_PASSION)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.PURPLE_PASSION,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='ROMA':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ROMA)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ROMA,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='ROMANTIC':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ROMANTIC)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.ROMANTIC,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='SHINE':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.SHINE)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.SHINE,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='VINTAGE':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.VINTAGE)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.VINTAGE,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='WALDEN':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WALDEN)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WALDEN,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='WESTEROS':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WESTEROS)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WESTEROS,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
                 elif style_themetype=='WONDERLAND':
-                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WONDERLAND)
+                    themetype=init_opts=opts.InitOpts(theme=ThemeType.WONDERLAND,width=style.setdefault('Initopts_width',"1000px"), height=style.setdefault('Initopts_height',"600px"))
 
                 if all_in_one_page =='ON':
                     if mutli_chart_type=='page':
