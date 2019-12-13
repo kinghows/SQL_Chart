@@ -13,6 +13,10 @@ chart used pyecharts 1.6+
 
 pip install pyecharts
 
+pip install snapshot-pyppeteer
+
+pyppeteer-install
+
 ### chart_demo.html: 
 
 chart effects demonstration.
