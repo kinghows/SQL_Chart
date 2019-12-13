@@ -33,6 +33,8 @@ demo database backup file.
 
 python sql_chart.py -p dbset.ini -s html
 
+python sql_chart.py -p dbset.ini -s png
+
 ### send email:
 
 python SendEmail.py -p emailset.ini -f my_chart1.html,my_chart2.html
