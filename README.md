@@ -13,7 +13,7 @@ chart used pyecharts 1.6+
 
 pip install pyecharts
 
-## save as png:
+### save as png:
 
 ### windows:
 pip install snapshot-pyppeteer
