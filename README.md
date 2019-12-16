@@ -13,9 +13,25 @@ chart used pyecharts 1.6+
 
 pip install pyecharts
 
+## save as png:
+
+### windows:
 pip install snapshot-pyppeteer
 
 pyppeteer-install
+
+### windows,linux:
+
+pip install snapshot-phantomjs
+
+wget https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2
+
+tar -xjvf phantomjs-2.1.1-linux-x86_64.tar.bz2
+
+ln -s /root/phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/local/bin/phantomjs
+
+yum install fontconfig freetype2
+
 
 ### chart_demo.html: 
 
