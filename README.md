@@ -65,6 +65,20 @@ use crontab regularly perform sql_chart.sh,auto generate html chart,and send ema
 
 Enjoy it!
 
+中文处理Linux需要encode，decode：
+
+88行：
+
+cols.append(str(col).encode('raw_unicode_escape').decode('utf-8')) #linux
+
+#cols.append(str(col)) #windows
+
+105行：
+
+strlist.append(str(col).encode('raw_unicode_escape').decode('utf-8')) #linux
+
+#strlist.append(str(col)) #windows
+
 ## 好用的DBA系列，喜欢的打颗星：
 
 - [MySQL_Watcher：数据库性能指标的HTML监控报告](https://github.com/kinghows/MySQL_Watcher)
