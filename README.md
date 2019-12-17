@@ -79,6 +79,8 @@ strlist.append(str(col).encode('raw_unicode_escape').decode('utf-8')) #linux
 
 #strlist.append(str(col)) #windows
 
+地理坐标系pyecharts在Linux上有BUG，请设置switch = OFF
+
 ## 好用的DBA系列，喜欢的打颗星：
 
 - [MySQL_Watcher：数据库性能指标的HTML监控报告](https://github.com/kinghows/MySQL_Watcher)
