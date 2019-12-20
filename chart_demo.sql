@@ -46430,11 +46430,11 @@ DROP TABLE IF EXISTS `t_weibo_nodes`;
 
 CREATE TABLE `t_weibo_nodes` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `name` varbinary(100) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
   `symbolsize` int(5) DEFAULT NULL,
-  `category` varbinary(100) DEFAULT NULL,
-  `draggable` varbinary(10) DEFAULT NULL,
-  `label` varbinary(100) DEFAULT NULL,
+  `category` varchar(100) DEFAULT NULL,
+  `draggable` varchar(10) DEFAULT NULL,
+  `label` varchar(100) DEFAULT NULL,
   `value` int(5) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1111 DEFAULT CHARSET=utf8mb4;

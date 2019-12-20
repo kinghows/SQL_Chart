@@ -111,7 +111,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
     ylist = f_get_query_list(conn, y, database_type)
     datas = f_get_query_record(conn, data,database_type)
     
-    if ylist[0] != '0' and chart_type != 'graph2' and chart_type != 'graph3'  and chart_type != 'pictorialbar' and chart_type != 'geo_lines' and chart_type != 'bar3d' and chart_type != 'bar3d_stack' and chart_type != 'line3d' and chart_type != 'timeline_map':
+    if y!= 'SELECT 0' and chart_type != 'graph2' and chart_type != 'graph3'  and chart_type != 'pictorialbar' and chart_type != 'geo_lines' and chart_type != 'bar3d' and chart_type != 'bar3d_stack' and chart_type != 'line3d' and chart_type != 'timeline_map':
         zdict={}
         for i in range(len(ylist)):
             zdict[ylist[i]]=[]
@@ -131,8 +131,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,                            
-                xaxis_opts=opts.AxisOpts(
-                axistick_opts=opts.AxisTickOpts(is_align_with_label=True),
+                xaxis_opts=opts.AxisOpts(axistick_opts=opts.AxisTickOpts(is_align_with_label=True),
                 is_scale=False,
                 boundary_gap=False,
                 ),
@@ -163,7 +162,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         for i in range(len(ylist)):
             name = ylist[i]
             data_pair = list(zip(xlist,zdict[name]))
-            c.add(series_name=name,data_pair=data_pair)
+            c.add(series_name=name,data_pair=data_pair,
+                rosetype=style.setdefault('rosetype',None),#"radius"
+                radius=style.setdefault('radius',None),#["30%", "55%"]
+                )
         c.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
         return c
     elif chart_type == 'bar': # 柱形图
@@ -171,6 +173,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+        
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Bar(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -178,11 +190,38 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
             name = ylist[i]
             c.add_yaxis(name, zdict[name]) 
+        #翻转 XY 轴
+        #c.reversal_axis()
+        #c.set_series_opts(label_opts=opts.LabelOpts(position="right")) 
+        #点，线 的最大值,最小值,平均值
+        #c.set_series_opts(
+        #    label_opts=opts.LabelOpts(is_show=False),
+        #    markpoint_opts=opts.MarkPointOpts(
+        #        data=[
+        #            opts.MarkPointItem(type_="max", name="最大值"),
+        #            opts.MarkPointItem(type_="min", name="最小值"),
+        #            opts.MarkPointItem(type_="average", name="平均值"),
+        #        ]
+        #    ),
+        #    markline_opts=opts.MarkLineOpts(
+        #        data=[
+        #            opts.MarkLineItem(type_="min", name="最小值"),
+        #            opts.MarkLineItem(type_="max", name="最大值"),
+        #            opts.MarkLineItem(type_="average", name="平均值"),
+        #自定义 线
+        #            opts.MarkLineItem(y=50, name="yAxis=50")
+        #        ]
+        #    ),
+        #)       
         return c
     elif chart_type == 'calendar': # 日历图
         if style.setdefault('toolbox_opts_is_show',False):
@@ -273,6 +312,8 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         for row in xs:
             if row[4] !='':
                 label =eval(row[4])
+            else:
+                label =''
             nodes.append({"name": row[0], "symbolSize": row[1],"category": row[2],"draggable": row[3],"label": label,"value": row[5]})
         ys = f_get_query_record(conn, y,database_type)
         categories = []
@@ -281,6 +322,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         links = []
         for row in datas:
             links.append({"source": row[0], "target": row[1]})
+            
         c = Graph(themetype)
         c.add(
                 "",
@@ -424,7 +466,22 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
         else:
             toolbox_opts=None
         c = Polar(themetype)
-        c.add("", datas, type_=style.setdefault('type_',"scatter"), label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
+        mytype=style.setdefault('type_',"scatter")
+        if mytype=="bar":
+            if style.setdefault('muti_bar',True):
+                c.add_schema(angleaxis_opts=opts.AngleAxisOpts(data=xlist, type_="category"))
+            else:
+                c.add_schema(
+                            radiusaxis_opts=opts.RadiusAxisOpts(data=xlist, type_="category"),
+                            angleaxis_opts=opts.AngleAxisOpts(is_clockwise=style.setdefault('is_clockwise',True), 
+                                                              max_=style.setdefault('max_',60)),)
+            for i in range(len(ylist)):
+                name = ylist[i]
+                c.add(name, zdict[name], type_=mytype, stack="stack0") 
+        else:
+            c.add("", datas, type_=mytype, 
+                             effect_opts=opts.EffectOpts(scale=style.setdefault('effect_opts_scale',10), period=style.setdefault('effect_opts_period',5)),
+                             label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
@@ -558,8 +615,12 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+        if style.setdefault('SymbolType_DIAMOND',False):
+            myshape=SymbolType.DIAMOND
+        else:
+            myshape=None
         c = WordCloud(themetype)
-        c.add("", datas, word_size_range=style.setdefault('word_size_range',[20, 100]))
+        c.add("", datas, word_size_range=style.setdefault('word_size_range',[20, 100]), shape=myshape)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
