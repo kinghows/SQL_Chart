@@ -192,6 +192,7 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             c.add(series_name=name,data_pair=data_pair,
                 rosetype=style.setdefault('rosetype',None),#"radius"
                 radius=style.setdefault('radius',None),#["30%", "55%"]
+                center=style.setdefault('center',None),#["75%", "50%"]
                 )
         c.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}: {c}"))
         return c
