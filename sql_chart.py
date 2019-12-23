@@ -124,17 +124,30 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Line(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
-                toolbox_opts=toolbox_opts,                            
-                xaxis_opts=opts.AxisOpts(axistick_opts=opts.AxisTickOpts(is_align_with_label=True),
-                is_scale=False,
-                boundary_gap=False,
-                ),
+                toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}")),
+                                                                       axistick_opts=opts.AxisTickOpts(is_align_with_label=True),
+                                                                       is_scale=False,
+                                                                       boundary_gap=False,),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),                            
             )
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
@@ -151,6 +164,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+
         c = Pie(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -158,6 +181,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         for i in range(len(ylist)):
             name = ylist[i]
@@ -228,6 +255,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Calendar(themetype)
         c.add("", datas, calendar_opts=opts.CalendarOpts(range_=xlist[0]))
         c.set_global_opts(
@@ -237,6 +274,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                         pos_left=style.setdefault('legend_pos_left',None),
                                         pos_right=style.setdefault('legend_pos_right',None)),
             toolbox_opts=toolbox_opts,
+            datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
             visualmap_opts=opts.VisualMapOpts(
             max_=style.setdefault('max_',20000),
             min_=style.setdefault('min_',500),
@@ -251,6 +292,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Funnel(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -258,6 +309,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.add("", datas, sort_=style.setdefault('sort_',"descending"),label_opts=opts.LabelOpts(position=style.setdefault('position',"inside")))
         return c
@@ -266,6 +321,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Gauge(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -273,6 +338,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.add("", datas, title_label_opts=opts.LabelOpts(
             font_size=style.setdefault('font_size', 40), 
@@ -285,6 +354,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Graph(themetype)
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
@@ -299,6 +378,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.add("", nodes, links, repulsion=style.setdefault('repulsion',4000))
         return c
@@ -307,6 +390,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+        
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
         for row in xs:
@@ -340,6 +433,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_right=style.setdefault('legend_pos_right',None),
                                             is_show=style.setdefault('legend_opts_is_show',False)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'graph3': # 关系图3
@@ -347,6 +444,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
         for row in xs:
@@ -380,6 +487,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_right=style.setdefault('legend_pos_right',None),
                                             ),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'graph4': # 关系图4
@@ -387,6 +498,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
         for row in xs:
@@ -421,6 +542,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_right=style.setdefault('legend_pos_right',None),
                                             ),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'liquid': # 水球图
@@ -428,6 +553,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Liquid(themetype)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
@@ -435,6 +570,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.add("lq", datas, is_outline_show=style.setdefault('is_outline_show',True))
         return c
@@ -443,6 +582,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         xs = f_get_query_record(conn, x,database_type)
         schemas = []
         for row in xs:
@@ -456,6 +605,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.add_schema(schemas)
         c.add("parallel", datas)
@@ -465,6 +618,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Polar(themetype)
         mytype=style.setdefault('type_',"scatter")
         if mytype=="bar":
@@ -488,6 +651,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'radar': # 雷达图
@@ -495,6 +662,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         xs = f_get_query_record(conn, x,database_type)
         schemas = []
         for row in xs:
@@ -520,6 +697,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'sankey': # 桑基图
@@ -527,6 +708,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         xs = f_get_query_record(conn, x,database_type)
         nodes = []
         for row in xs:
@@ -548,6 +739,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'sunburst': # 旭日图
@@ -555,6 +750,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         j = []
         for row in datas:
             j.append(eval(row[0]))
@@ -588,6 +793,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.set_series_opts(label_opts=opts.LabelOpts(formatter="{b}"))
         return c
@@ -596,6 +805,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = ThemeRiver(themetype)
         c.add(
                 xlist,
@@ -608,6 +827,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'wordcloud': # 词云图
@@ -619,6 +842,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             myshape=SymbolType.DIAMOND
         else:
             myshape=None
+                        
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = WordCloud(themetype)
         c.add("", datas, word_size_range=style.setdefault('word_size_range',[20, 100]), shape=myshape)
         c.set_global_opts(title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
@@ -627,6 +860,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'boxpolt': # 箱形图
@@ -634,6 +871,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Boxplot(themetype)
         c.add_xaxis(xlist)
         for i in range(len(ylist)):
@@ -648,6 +895,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'effectscatter': # 涟漪特效散点图
@@ -655,6 +906,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = EffectScatter(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("", datas)
@@ -664,6 +925,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'heatmap': # 热力图
@@ -671,6 +936,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = HeatMap(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("series0",ylist , datas)
@@ -681,6 +956,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'kline': # K线图
@@ -688,6 +967,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Kline(themetype)
         c.add_xaxis(xlist)
         c.add_yaxis("kline", datas,itemstyle_opts=opts.ItemStyleOpts(
@@ -700,15 +989,17 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                 data=[opts.MarkLineItem(type_="max", value_dim="close")]
                 ),
             )
-        c.set_global_opts(yaxis_opts=opts.AxisOpts(is_scale=True),
-                xaxis_opts=opts.AxisOpts(is_scale=True),
-                datazoom_opts=[opts.DataZoomOpts(type_="inside")],
+        c.set_global_opts(
                 title_opts=opts.TitleOpts(title=title,pos_top=style.setdefault('title_pos_top',None),
                                                                 pos_right=style.setdefault('title_pos_right',None)),
                 legend_opts=opts.LegendOpts(pos_top=style.setdefault('legend_pos_top',None),
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(is_scale=True,axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(is_scale=True,axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'pictorialbar': # 象形柱状图
@@ -716,6 +1007,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         ys = f_get_query_record(conn, y,database_type)
         symbols = {}
         for row in ys:
@@ -754,10 +1055,13 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
-                xaxis_opts=opts.AxisOpts(is_show=True),
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(is_show=True,axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
                 yaxis_opts=opts.AxisOpts(
                     axistick_opts=opts.AxisTickOpts(is_show=False),
-                    axisline_opts=opts.AxisLineOpts(linestyle_opts=opts.LineStyleOpts(opacity=0))
+                    axisline_opts=opts.AxisLineOpts(linestyle_opts=opts.LineStyleOpts(opacity=0)),
+                    axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))
                     )    
                 )
         return c
@@ -766,6 +1070,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Scatter(themetype)
         c.add_xaxis(xlist)
         v =[]
@@ -785,6 +1099,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'overlap': # 层叠多图
@@ -792,6 +1110,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         v1 = []
         v2 = []
         v3 = []
@@ -815,9 +1143,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
-                yaxis_opts=opts.AxisOpts(
-                    axislabel_opts=opts.LabelOpts(formatter="{value} ml")
-                ),
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
             )
         line = Line(themetype).add_xaxis(xlist).add_yaxis("平均温度", v3, yaxis_index=1)
         c.overlap(line)
@@ -827,6 +1156,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         j = []
         for row in datas:
             j.append(eval(row[0]))
@@ -844,6 +1183,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'treemap': # 矩形树图
@@ -851,6 +1194,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         j = []
         for row in datas:
             j.append(eval(row[0]))
@@ -862,6 +1215,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'geo': # 地理坐标系
@@ -869,6 +1226,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Geo(themetype)
         c.add_schema(maptype=xlist[0])
         if style.setdefault('ChartType','None')=='None':
@@ -885,6 +1252,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'geo_lines': # 地理坐标系3
@@ -892,6 +1263,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         ys = f_get_query_record(conn, y,database_type)
         c = Geo(themetype)
         c.add_schema(maptype=xlist[0],
@@ -914,6 +1295,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'map': # 地图
@@ -921,6 +1306,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Map(themetype)
         c.add(xlist[1],datas, xlist[0])
         c.set_series_opts(label_opts=opts.LabelOpts(is_show=style.setdefault('is_show',False)))
@@ -941,6 +1336,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 visualmap_opts=opts.VisualMapOpts(max_=style.setdefault('max_',200),is_piecewise=style.setdefault('is_piecewise',True))
                 )
         return c
@@ -949,6 +1348,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c =  Bar3D(themetype)
         c.add(
             "",
@@ -965,6 +1374,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'bar3d_stack': # 堆叠柱状图
@@ -972,6 +1385,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Bar3D(themetype)
         for _ in range(7):
             c.add(
@@ -990,6 +1413,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         c.set_series_opts(**{"stack": "stack"})
         return c
@@ -998,6 +1425,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Line3D(themetype)
         c.add(
                 "",
@@ -1019,6 +1456,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'scatter3d': # 3D散点图
@@ -1026,6 +1467,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Scatter3D(themetype)
         c.add(xlist[0], datas)
         c.set_global_opts(
@@ -1036,6 +1487,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'surface3d': # 3D曲面图
@@ -1043,6 +1498,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         c = Surface3D(themetype)
         c.add(
                 xlist[0],
@@ -1063,6 +1528,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'mapglobe': # 地球地图
@@ -1070,6 +1539,16 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
             toolbox_opts=opts.ToolboxOpts()
         else:
             toolbox_opts=None
+                
+        if style.setdefault('datazoom_opts',None)=='horizontal':
+            datazoom_opts=opts.DataZoomOpts()
+        elif style.setdefault('datazoom_opts',None)=='vertical':
+            datazoom_opts=opts.DataZoomOpts(orient="vertical")
+        elif style.setdefault('datazoom_opts',None)=='inside':
+            datazoom_opts=opts.DataZoomOpts(type_="inside")
+        else:
+            datazoom_opts=None
+        
         high = max([x for _, x in datas])
         low = min([x for _, x in datas])
         c = MapGlobe(themetype)
@@ -1094,6 +1573,10 @@ def chart(conn,database_type,chart_type,title,x,y,data,style,themetype):
                                             pos_left=style.setdefault('legend_pos_left',None),
                                             pos_right=style.setdefault('legend_pos_right',None)),
                 toolbox_opts=toolbox_opts,
+                datazoom_opts=datazoom_opts,
+                xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=style.setdefault('yaxis_opts_rotate',0),
+                                                                       formatter=style.setdefault('xaxis_opts_formatter',"{value}"))),
+                yaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(formatter=style.setdefault('yaxis_opts_formatter',"{value}"))),
                 )
         return c
     elif chart_type == 'kline_profession': # 多图联动
